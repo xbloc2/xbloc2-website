@@ -81,35 +81,79 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden border-b">
-      <Container className="grid items-center gap-10 py-16 md:grid-cols-2 md:py-24">
-        <div>
-          <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Fire rated walls
-            <br className="hidden sm:block" /> in one trade.
-          </h1>
-          <p className="mt-4 text-lg text-neutral-700">
-            AAC panels and blocks with ready dose packs. Up to 4 hour UL-rated assemblies. Single wythe. Fewer trades. Faster close-in.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <a href="#rfq" className="rounded-2xl bg-[#203c79] px-5 py-3 text-sm font-semibold text-white shadow hover:opacity-90">
-              Start Your Project Assessment
-            </a>
-            <a href="#resources" className="rounded-2xl border border-[#203c79] px-5 py-3 text-sm font-semibold text-[#203c79] hover:bg-[#203c79]/5">
-              Download the Technical Brochure
-            </a>
+    <section className="relative h-[60vh] w-full overflow-hidden border-b">
+      {/* Background video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover"
+      >
+        <source src="/Building-project_2.mp4" type="video/mp4" />
+      </video>
+
+      {/* Blue overlay ~50% */}
+      <div className="absolute inset-0 bg-[#203c79]/50" />
+
+      {/* Content */}
+      <Container className="relative z-10 h-full">
+        <div className="grid h-full items-center gap-10 md:grid-cols-2">
+          <div className="text-white">
+            <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
+              Fire rated walls
+              <br className="hidden sm:block" /> in one trade.
+            </h1>
+            <p className="mt-4 text-lg text-white/90">
+              AAC panels and blocks with ready dose packs. Up to 4 hour UL-rated assemblies. Single wythe. Fewer trades. Faster close-in.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a
+                href="#rfq"
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#203c79] shadow hover:bg-white/90"
+              >
+                Start Your Project Assessment
+              </a>
+              <a
+                href="#resources"
+                className="rounded-2xl border border-white/80 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Download the Technical Brochure
+              </a>
+            </div>
+            <ul className="mt-6 grid gap-2 text-sm text-white/90">
+              <li className="flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-white" /> Non combustible envelope
+              </li>
+              <li className="flex items-center gap-2">
+                <Flame className="h-4 w-4 text-[#e52634]" /> Up to 4 hour fire rating
+              </li>
+              <li className="flex items-center gap-2">
+                <HardHat className="h-4 w-4 text-white" /> One inspection path
+              </li>
+            </ul>
           </div>
-          <ul className="mt-6 grid gap-2 text-sm text-neutral-600">
-            <li className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-[#203c79]" /> Non combustible envelope</li>
-            <li className="flex items-center gap-2"><Flame className="h-4 w-4 text-[#e52634]" /> Up to 4 hour fire rating</li>
-            <li className="flex items-center gap-2"><HardHat className="h-4 w-4 text-[#203c79]" /> One inspection path</li>
-          </ul>
+
+          {/* Card on dark background with slight glass effect */}
+          <div className="md:block hidden">
+            <div className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-sm backdrop-blur md:p-8">
+              <div className="grid gap-6 sm:grid-cols-2">
+                <Stat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white" />} />
+                <Stat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white" />} />
+                <Stat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white" />} />
+                <Stat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4 text-white" />} />
+              </div>
+              <p className="mt-4 text-xs text-white/70">
+                * Example material + labor snapshot for thin cladding. Project conditions vary. Verify with engineering.
+              </p>
+            </div>
+          </div>
         </div>
-        <HeroCard />
       </Container>
     </section>
   );
 }
+
 
 function HeroCard() {
   return (

@@ -242,30 +242,42 @@ function ProofBar() {
 
 function CTACluster() {
   return (
-    <section className="py-12">
+    <section className="border-t bg-white/70 supports-[backdrop-filter]:backdrop-blur py-8">
       <Container>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <CTAButton href="#rfq" label="Request a Technical Consultation" />
-          <CTAButton href="#rfq" label="Get Design Support" variant="outline" />
-          <CTAButton href="#resources" label="Specify Xbloc² for Your Project" variant="ghost" />
-          <CTAButton href="#rfq" label="Start Your Project Assessment" accent />
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <CTAButton href="#rfq" label="Request a Technical Consultation" variant="soft-primary" />
+          <CTAButton href="#rfq" label="Get Design Support" variant="quiet" />
+          <CTAButton href="#resources" label="Specify Xbloc² for Your Project" variant="quiet" />
+          <CTAButton href="#rfq" label="Start Your Project Assessment" variant="soft-accent" />
         </div>
       </Container>
     </section>
   );
 }
 
-function CTAButton({ href, label, variant = "solid", accent = false }) {
-  const base = "rounded-2xl px-5 py-3 text-sm font-semibold shadow flex items-center justify-center";
+function CTAButton({ href, label, variant = "quiet" }) {
+  const base =
+    "rounded-2xl px-4 py-2.5 text-[13px] font-medium shadow-none flex items-center justify-center transition";
+
   const styles = {
-    solid: `${accent ? "bg-[#e52634]" : "bg-[#203c79]"} text-white hover:opacity-90`,
-    outline: "border border-[#203c79] text-[#203c79] hover:bg-[#203c79]/5",
-    ghost: "border border-transparent text-[#203c79] hover:bg-[#203c79]/5",
+    // very calm, neutral pill
+    quiet:
+      "border border-neutral-200 text-neutral-700 bg-white/80 hover:bg-neutral-100",
+    // brand color but soft fill
+    "soft-primary":
+      "border border-[#203c79]/20 bg-[#203c79]/10 text-[#203c79] hover:bg-[#203c79]/15",
+    // accent red but soft so it doesn’t compete with hero primary
+    "soft-accent":
+      "border border-[#e52634]/20 bg-[#e52634]/10 text-[#b11e2a] hover:bg-[#e52634]/15",
   }[variant];
+
   return (
-    <a href={href} className={`${base} ${styles}`}>{label}</a>
+    <a href={href} className={`${base} ${styles}`}>
+      {label}
+    </a>
   );
 }
+
 
 function ValueTiles() {
   const tiles = [

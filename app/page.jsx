@@ -1,1 +1,3 @@
-export default function Page(){return <h1>Hello XBloc2</h1>}
+export default function Page() {
+  return <main style={{padding:24}}><h1>XBloc2 is live</h1></main>;
+}

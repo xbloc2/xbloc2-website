@@ -62,82 +62,103 @@ function BrandWordmark() {
 
 function Navbar() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur">
-      <Container className="flex h-16 items-center justify-between">
-        <BrandWordmark />
-        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-          <a href="#why" className="hover:opacity-80">Why AAC</a>
-          <a href="#resources" className="hover:opacity-80">Resources</a>
-          <a href="#calc" className="hover:opacity-80">Calculator</a>
-          <a href="#rfq" className="hover:opacity-80">Contact</a>
-        </nav>
-        <a href="#rfq" className="rounded-xl bg-[#203c79] px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-90">
-          Request a Technical Consultation
-        </a>
-      </Container>
-    </header>
+    <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-white/80 backdrop-blur">
+  <Container className="flex h-16 items-center justify-between gap-4">
+    <BrandWordmark />
+    <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-700">
+      <a href="#why" className="hover:text-neutral-900">Why AAC</a>
+      <a href="#resources" className="hover:text-neutral-900">Resources</a>
+      <a href="#calc" className="hover:text-neutral-900">Calculator</a>
+      <a href="#rfq" className="hover:text-neutral-900">Contact</a>
+    </nav>
+    <a
+      href="#rfq"
+      className="rounded-xl bg-[#203c79] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#193060] transition"
+    >
+      Request a Technical Consultation
+    </a>
+  </Container>
+</header>
+
   );
 }
 
 function Hero() {
   return (
-    <section className="relative h-[60vh] w-full overflow-hidden border-b">
-      {/* Background video */}
+    <section className="relative h-[68vh] min-h-[560px] w-full overflow-hidden border-b">
+      {/* Background video (hidden for prefers-reduced-motion) */}
       <video
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 h-full w-full object-cover"
+        preload="auto"
+        poster="/xbloc2-logo.svg"
+        className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
       >
         <source src="/Building-project_2.mp4" type="video/mp4" />
       </video>
 
-      {/* Blue overlay ~50% */}
-      <div className="absolute inset-0 bg-[#203c79]/50" />
+      {/* Color scrim + soft gradients */}
+      <div className="absolute inset-0">
+        {/* base tint (deeper + calmer) */}
+        <div className="absolute inset-0 bg-[#1f3161]/60" />
+        {/* top and bottom fade to ease the eyes */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35" />
+        {/* subtle radial focus around content */}
+        <div className="absolute inset-0 [mask-image:radial-gradient(70%_70%_at_30%_40%,black,transparent)] bg-black/20" />
+      </div>
 
       {/* Content */}
       <Container className="relative z-10 h-full">
         <div className="grid h-full items-center gap-10 md:grid-cols-2">
-          <div className="text-white">
-            <h1 className="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-              Fire rated walls
-              <br className="hidden sm:block" /> in one trade.
-            </h1>
-            <p className="mt-4 text-lg text-white/90">
-              AAC panels and blocks with ready dose packs. Up to 4 hour UL-rated assemblies. Single wythe. Fewer trades. Faster close-in.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a
-                href="#rfq"
-                className="rounded-2xl bg-white px-5 py-3 text-sm font-semibold text-[#203c79] shadow hover:bg-white/90"
-              >
-                Start Your Project Assessment
-              </a>
-              <a
-                href="#resources"
-                className="rounded-2xl border border-white/80 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10"
-              >
-                Download the Technical Brochure
-              </a>
+          {/* Copy on a soft glass panel for contrast */}
+          <div className="max-w-xl">
+            <div className="rounded-3xl bg-black/15 ring-1 ring-white/10 backdrop-blur-sm p-6 md:p-8">
+              <h1 className="text-white drop-shadow-sm text-4xl sm:text-5xl font-extrabold leading-[1.08] tracking-tight">
+                Fire rated walls
+                <br className="hidden sm:block" /> in one trade.
+              </h1>
+              <p className="mt-4 text-base sm:text-lg text-white/85">
+                AAC panels and blocks with ready dose packs. Up to 4 hour UL-rated assemblies.
+                Single wythe. Fewer trades. Faster close-in.
+              </p>
+
+              {/* CTAs */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="#rfq"
+                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#203c79] bg-white shadow hover:bg-white/95 transition"
+                >
+                  Start Your Project Assessment
+                </a>
+                <a
+                  href="#resources"
+                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/30 hover:bg-white/10 transition"
+                >
+                  Download the Technical Brochure
+                </a>
+              </div>
+
+              {/* Bullets */}
+              <ul className="mt-5 grid gap-2 text-sm text-white/90">
+                <li className="flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-white" /> Non combustible envelope
+                </li>
+                <li className="flex items-center gap-2">
+                  <Flame className="h-4 w-4 text-[#ff6b6b]" /> Up to 4 hour fire rating
+                </li>
+                <li className="flex items-center gap-2">
+                  <HardHat className="h-4 w-4 text-white" /> One inspection path
+                </li>
+              </ul>
             </div>
-            <ul className="mt-6 grid gap-2 text-sm text-white/90">
-              <li className="flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-white" /> Non combustible envelope
-              </li>
-              <li className="flex items-center gap-2">
-                <Flame className="h-4 w-4 text-[#e52634]" /> Up to 4 hour fire rating
-              </li>
-              <li className="flex items-center gap-2">
-                <HardHat className="h-4 w-4 text-white" /> One inspection path
-              </li>
-            </ul>
           </div>
 
-          {/* Card on dark background with slight glass effect */}
-          <div className="md:block hidden">
-            <div className="rounded-3xl border border-white/15 bg-white/10 p-6 shadow-sm backdrop-blur md:p-8">
-              <div className="grid gap-6 sm:grid-cols-2">
+          {/* Stats card - lighter, less contrasty */}
+          <div className="md:justify-self-end">
+            <div className="rounded-3xl bg-white/10 backdrop-blur-md ring-1 ring-white/15 shadow-[0_8px_28px_rgba(0,0,0,0.25)] p-6 md:p-8">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <Stat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white" />} />
                 <Stat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white" />} />
                 <Stat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white" />} />
@@ -153,7 +174,6 @@ function Hero() {
     </section>
   );
 }
-
 
 function HeroCard() {
   return (
@@ -173,15 +193,16 @@ function HeroCard() {
 
 function Stat({ label, value, icon }) {
   return (
-    <div className="rounded-2xl border p-4 shadow-sm">
-      <div className="flex items-center gap-2 text-neutral-500">
+    <div className="rounded-2xl ring-1 ring-white/15 bg-white/5 p-4 shadow-sm">
+      <div className="flex items-center gap-2 text-white/70">
         {icon}
-        <span className="text-xs uppercase tracking-wide">{label}</span>
+        <span className="text-[11px] uppercase tracking-wide">{label}</span>
       </div>
-      <div className="mt-2 text-2xl font-bold">{value}</div>
+      <div className="mt-1.5 text-2xl font-bold text-white">{value}</div>
     </div>
   );
 }
+
 
 function ProofBar() {
   const items = [

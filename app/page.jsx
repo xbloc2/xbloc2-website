@@ -39,20 +39,20 @@ export default function Xbloc2LandingPage() {
   );
 }
 
+/* ---------- Layout primitives ---------- */
+
 function Container({ children, className = "" }) {
   return (
-    <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>
+    <div className={`mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>
+      {children}
+    </div>
   );
 }
 
 function BrandWordmark() {
   return (
     <div className="flex items-center gap-3">
-      <img
-        src="/xbloc2-logo.svg"
-        alt="Xbloc²"
-        className="h-9 w-auto hidden sm:block"
-      />
+      <img src="/xbloc2-logo.svg" alt="Xbloc²" className="h-9 w-auto hidden sm:block" />
       <span className="text-xl font-extrabold tracking-tight text-[#203c79] sm:hidden">
         Xbloc<sup className="align-super text-[0.7em]">2</sup>
       </span>
@@ -60,33 +60,36 @@ function BrandWordmark() {
   );
 }
 
+/* ---------- Navbar ---------- */
+
 function Navbar() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-white/80 backdrop-blur">
-  <Container className="flex h-16 items-center justify-between gap-4">
-    <BrandWordmark />
-    <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-700">
-      <a href="#why" className="hover:text-neutral-900">Why AAC</a>
-      <a href="#resources" className="hover:text-neutral-900">Resources</a>
-      <a href="#calc" className="hover:text-neutral-900">Calculator</a>
-      <a href="#rfq" className="hover:text-neutral-900">Contact</a>
-    </nav>
-    <a
-      href="#rfq"
-      className="rounded-xl bg-[#203c79] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#193060] transition"
-    >
-      Request a Technical Consultation
-    </a>
-  </Container>
-</header>
-
+      <Container className="flex h-16 items-center justify-between gap-4">
+        <BrandWordmark />
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-700">
+          <a href="#why" className="hover:text-neutral-900">Why AAC</a>
+          <a href="#resources" className="hover:text-neutral-900">Resources</a>
+          <a href="#calc" className="hover:text-neutral-900">Calculator</a>
+          <a href="#rfq" className="hover:text-neutral-900">Contact</a>
+        </nav>
+        <a
+          href="#rfq"
+          className="rounded-xl bg-[#203c79] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#193060] transition"
+        >
+          Request a Technical Consultation
+        </a>
+      </Container>
+    </header>
   );
 }
 
+/* ---------- Hero ---------- */
+
 function Hero() {
   return (
-    <section className="relative h-[64vh] min-h-[520px] w-full overflow-hidden border-b">
-      {/* Background video (hidden if user prefers reduced motion) */}
+    <section className="relative h-[60vh] w-full overflow-hidden border-b">
+      {/* Background video */}
       <video
         autoPlay
         muted
@@ -94,81 +97,89 @@ function Hero() {
         playsInline
         preload="auto"
         poster="/xbloc2-logo.svg"
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+        className="absolute inset-0 h-full w-full object-cover"
       >
         <source src="/Building-project_2.mp4" type="video/mp4" />
+        {/* <source src="/Building-project_2.webm" type="video/webm" /> */}
       </video>
 
-      {/* Cooling tint + vignette + focus mask */}
-      <div className="absolute inset-0">
-        {/* Deeper, cooler base to calm the frame */}
-        <div className="absolute inset-0 bg-[#172b54]/70" />
-        {/* Gentle top/bottom gradient to ease edges */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
-        {/* Soft radial focus around copy block */}
-        <div className="absolute inset-0 [mask-image:radial-gradient(60%_60%_at_28%_40%,black,transparent)] bg-black/15" />
-        {/* Subtle vignette to quiet the perimeter */}
-        <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10" />
+      {/* Blue overlay + vignette */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 bg-[#203c79]/45" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
       </div>
 
       {/* Content */}
       <Container className="relative z-10 h-full">
-        <div className="grid h-full items-center gap-8 md:grid-cols-2">
-          {/* Copy panel */}
-          <div className="max-w-xl">
-            <div className="rounded-3xl bg-black/20 supports-[backdrop-filter]:backdrop-blur-md ring-1 ring-white/10 p-6 md:p-8">
-              <h1 className="text-white/95 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">
-                Fire rated walls
-                <br className="hidden sm:block" /> in one trade.
+        <div className="h-full flex items-center">
+          {/* Two-card layout: stacked on mobile, side-by-side on md+ */}
+          <div className="grid w-full gap-6 md:grid-cols-2">
+            {/* CARD 1 — pitch + CTAs + bullets */}
+            <div className="rounded-3xl bg-neutral-900/70 backdrop-blur-md ring-1 ring-white/10 shadow-xl p-6 sm:p-8 max-w-xl">
+              <h1 className="text-white text-3xl sm:text-4xl font-extrabold leading-tight tracking-tight">
+                Fire rated walls<br className="hidden sm:block" /> in one trade.
               </h1>
-              <p className="mt-3 text-base sm:text-lg text-white/85">
+              <p className="mt-3 text-white/85 text-base sm:text-lg">
                 AAC panels and blocks with ready dose packs. Up to 4 hour UL-rated assemblies.
                 Single wythe. Fewer trades. Faster close-in.
               </p>
 
-              {/* CTAs */}
               <div className="mt-5 flex flex-wrap gap-3">
                 <a
                   href="#rfq"
-                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#203c79] bg-white shadow hover:bg-white/95 transition"
+                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#203c79] bg-white shadow-md hover:shadow-lg hover:bg-white/95 transition"
                 >
                   Start Your Project Assessment
                 </a>
                 <a
                   href="#resources"
-                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/25 hover:bg-white/10 transition"
+                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/30 hover:bg-white/10 transition"
                 >
                   Download the Technical Brochure
                 </a>
               </div>
 
-              {/* Bullets */}
-              <ul className="mt-4 grid gap-1.5 text-sm text-white/90">
+              <ul className="mt-5 grid gap-2 text-sm text-white/90">
                 <li className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-white/95" /> Non combustible envelope
+                  <ShieldCheck className="h-4 w-4 text-white" /> Non combustible envelope
                 </li>
                 <li className="flex items-center gap-2">
-                  <Flame className="h-4 w-4 text-[#ff8a8a]" /> Up to 4 hour fire rating
+                  <Flame className="h-4 w-4 text-[#ff6b6b]" /> Up to 4 hour fire rating
                 </li>
                 <li className="flex items-center gap-2">
-                  <HardHat className="h-4 w-4 text-white/95" /> One inspection path
+                  <HardHat className="h-4 w-4 text-white" /> One inspection path
                 </li>
               </ul>
             </div>
-          </div>
 
-          {/* Stats card */}
-          <div className="md:justify-self-end">
-            <div className="rounded-3xl bg-white/12 supports-[backdrop-filter]:backdrop-blur-lg ring-1 ring-white/15 shadow-[0_6px_24px_rgba(0,0,0,0.22)] p-6 md:p-8">
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Stat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white/90" />} />
-                <Stat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white/90" />} />
-                <Stat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white/90" />} />
-                <Stat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4 text-white/90" />} />
+            {/* CARD 2 — stats */}
+            <div className="rounded-3xl bg-neutral-900/70 backdrop-blur-md ring-1 ring-white/10 shadow-xl p-6 sm:p-8 max-w-md md:justify-self-end">
+              <h3 className="text-white text-lg font-semibold">At a glance</h3>
+              <div className="mt-3 space-y-2 text-sm text-white/85">
+                <div className="flex items-center gap-2">
+                  <Factory className="h-4 w-4 text-white/70" />
+                  <span className="flex-1">Install speed</span>
+                  <span className="font-bold">Fewer trades</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Flame className="h-4 w-4 text-white/70" />
+                  <span className="flex-1">Fire rating</span>
+                  <span className="font-bold">Up to 4h</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <LineChart className="h-4 w-4 text-white/70" />
+                  <span className="flex-1">Typical cost</span>
+                  <span className="font-bold">$3.12+/sf*</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ClipboardList className="h-4 w-4 text-white/70" />
+                  <span className="flex-1">Inspection</span>
+                  <span className="font-bold">Single path</span>
+                </div>
               </div>
-              <p className="mt-3 text-[11px] leading-relaxed text-white/70">
-                * Material + labor snapshot for thin cladding. Conditions vary. Verify with engineering.
+              <p className="mt-4 text-[11px] leading-relaxed text-white/60">
+                * Example material + labor snapshot for thin cladding. Project conditions vary.
+                Verify with engineering.
               </p>
             </div>
           </div>
@@ -178,46 +189,24 @@ function Hero() {
   );
 }
 
-function Stat({ label, value, icon }) {
+
+
+/* ---------- Reusable stat tile (dark or light) ---------- */
+
+function StatTile({ label, value, icon, tone = "dark" }) {
+  const isDark = tone === "dark";
   return (
-    <div className="rounded-2xl ring-1 ring-white/15 bg-white/8 p-4 shadow-sm">
-      <div className="flex items-center gap-2 text-white/75">
+    <div className={isDark ? "rounded-2xl ring-1 ring-white/15 bg-white/8 p-4 shadow-sm" : "rounded-2xl border bg-white p-4 shadow-sm"}>
+      <div className={`flex items-center gap-2 ${isDark ? "text-white/75" : "text-neutral-500"}`}>
         {icon}
         <span className="text-[11px] uppercase tracking-wide">{label}</span>
       </div>
-      <div className="mt-1 text-[22px] font-bold text-white/95">{value}</div>
+      <div className={`mt-1 font-bold ${isDark ? "text-white/95 text-[22px]" : "text-neutral-900 text-2xl"}`}>{value}</div>
     </div>
   );
 }
 
-function HeroCard() {
-  return (
-    <div className="relative rounded-3xl border bg-white p-6 shadow-sm md:p-8">
-      <div className="grid gap-6 sm:grid-cols-2">
-        <Stat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4" />} />
-        <Stat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4" />} />
-        <Stat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4" />} />
-        <Stat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4" />} />
-      </div>
-      <p className="mt-4 text-xs text-neutral-500">
-        * Example material + labor snapshot for thin cladding. Project conditions vary. Verify with engineering.
-      </p>
-    </div>
-  );
-}
-
-function Stat({ label, value, icon }) {
-  return (
-    <div className="rounded-2xl ring-1 ring-white/15 bg-white/5 p-4 shadow-sm">
-      <div className="flex items-center gap-2 text-white/70">
-        {icon}
-        <span className="text-[11px] uppercase tracking-wide">{label}</span>
-      </div>
-      <div className="mt-1.5 text-2xl font-bold text-white">{value}</div>
-    </div>
-  );
-}
-
+/* ---------- Proof bar ---------- */
 
 function ProofBar() {
   const items = [
@@ -230,7 +219,10 @@ function ProofBar() {
     <section className="border-b bg-neutral-50/60">
       <Container className="flex flex-wrap items-center justify-center gap-4 py-4 sm:gap-6">
         {items.map((it, i) => (
-          <div key={i} className="flex items-center gap-2 rounded-full border bg-white px-4 py-2 text-xs font-semibold text-neutral-700 shadow-sm">
+          <div
+            key={i}
+            className="flex items-center gap-2 rounded-full border bg-white px-4 py-2 text-xs font-semibold text-neutral-700 shadow-sm"
+          >
             {it.icon}
             <span>{it.label}</span>
           </div>
@@ -239,6 +231,8 @@ function ProofBar() {
     </section>
   );
 }
+
+/* ---------- CTA cluster (quieter) ---------- */
 
 function CTACluster() {
   return (
@@ -256,21 +250,12 @@ function CTACluster() {
 }
 
 function CTAButton({ href, label, variant = "quiet" }) {
-  const base =
-    "rounded-2xl px-4 py-2.5 text-[13px] font-medium shadow-none flex items-center justify-center transition";
-
+  const base = "rounded-2xl px-4 py-2.5 text-[13px] font-medium shadow-none flex items-center justify-center transition";
   const styles = {
-    // very calm, neutral pill
-    quiet:
-      "border border-neutral-200 text-neutral-700 bg-white/80 hover:bg-neutral-100",
-    // brand color but soft fill
-    "soft-primary":
-      "border border-[#203c79]/20 bg-[#203c79]/10 text-[#203c79] hover:bg-[#203c79]/15",
-    // accent red but soft so it doesn’t compete with hero primary
-    "soft-accent":
-      "border border-[#e52634]/20 bg-[#e52634]/10 text-[#b11e2a] hover:bg-[#e52634]/15",
+    quiet: "border border-neutral-200 text-neutral-700 bg-white/80 hover:bg-neutral-100",
+    "soft-primary": "border border-[#203c79]/20 bg-[#203c79]/10 text-[#203c79] hover:bg-[#203c79]/15",
+    "soft-accent": "border border-[#e52634]/20 bg-[#e52634]/10 text-[#b11e2a] hover:bg-[#e52634]/15",
   }[variant];
-
   return (
     <a href={href} className={`${base} ${styles}`}>
       {label}
@@ -278,6 +263,7 @@ function CTAButton({ href, label, variant = "quiet" }) {
   );
 }
 
+/* ---------- Why tiles ---------- */
 
 function ValueTiles() {
   const tiles = [
@@ -323,6 +309,8 @@ function ValueTiles() {
   );
 }
 
+/* ---------- Compare table ---------- */
+
 function Compare() {
   const rows = [
     { label: "Fire rating", aac: "Up to 4h", gypsum: "2–4h with layers" },
@@ -363,6 +351,8 @@ function Compare() {
     </section>
   );
 }
+
+/* ---------- Dose packs ---------- */
 
 function DosePacks() {
   const items = [
@@ -407,13 +397,15 @@ function DosePacks() {
   );
 }
 
+/* ---------- Calculator ---------- */
+
 function Calculator() {
-  const [wallArea, setWallArea] = useState(10000); // sq ft
-  const [panelLen, setPanelLen] = useState(8); // ft
-  const [panelHeight, setPanelHeight] = useState(2); // ft
-  const [wastePct, setWastePct] = useState(5); // %
-  const [matCostSf, setMatCostSf] = useState(3.12); // $/sf
-  const [laborSf, setLaborSf] = useState(4.5); // $/sf
+  const [wallArea, setWallArea] = useState(10000);
+  const [panelLen, setPanelLen] = useState(8);
+  const [panelHeight, setPanelHeight] = useState(2);
+  const [wastePct, setWastePct] = useState(5);
+  const [matCostSf, setMatCostSf] = useState(3.12);
+  const [laborSf, setLaborSf] = useState(4.5);
 
   const panelArea = useMemo(() => panelLen * panelHeight, [panelLen, panelHeight]);
   const count = useMemo(
@@ -516,6 +508,8 @@ function CurrencyField({ label, value, onChange, step = 0.1 }) {
   );
 }
 
+/* ---------- RFQ ---------- */
+
 function RFQ() {
   const [form, setForm] = useState({
     name: "",
@@ -584,10 +578,16 @@ ${form.message}`
               />
             </label>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <a href={mailtoHref} className="rounded-2xl bg-[#e52634] px-5 py-3 text-sm font-semibold text-white shadow hover:opacity-90">
+              <a
+                href={mailtoHref}
+                className="rounded-2xl bg-[#e52634] px-5 py-3 text-sm font-semibold text-white shadow hover:opacity-90"
+              >
                 Request a Technical Consultation
               </a>
-              <a href="#rfq" className="rounded-2xl border border-[#203c79] px-5 py-3 text-sm font-semibold text-[#203c79] hover:bg-[#203c79]/5">
+              <a
+                href="#rfq"
+                className="rounded-2xl border border-[#203c79] px-5 py-3 text-sm font-semibold text-[#203c79] hover:bg-[#203c79]/5"
+              >
                 Start Your Project Assessment
               </a>
             </div>
@@ -611,8 +611,12 @@ ${form.message}`
                 Download the Technical Brochure, UL letters, CAD details, and install guides in Resources.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <a href="#resources" className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100"><BookOpen className="h-4 w-4" /> Explore Case Studies</a>
-                <a href="#resources" className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100"><Play className="h-4 w-4" /> Watch Placement in Action</a>
+                <a href="#resources" className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100">
+                  <BookOpen className="h-4 w-4" /> Explore Case Studies
+                </a>
+                <a href="#resources" className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100">
+                  <Play className="h-4 w-4" /> Watch Placement in Action
+                </a>
               </div>
             </div>
           </div>
@@ -646,12 +650,16 @@ function SelectField({ label, value, onChange, options }) {
         className="mt-1 w-full rounded-xl border bg-white px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
       >
         {options.map((o) => (
-          <option key={o} value={o}>{o}</option>
+          <option key={o} value={o}>
+            {o}
+          </option>
         ))}
       </select>
     </label>
   );
 }
+
+/* ---------- Footer ---------- */
 
 function Footer() {
   return (
@@ -702,14 +710,27 @@ function Footer() {
             <li>Engineering support</li>
             <li>Mon–Fri</li>
           </ul>
-          <a href="#rfq" className="mt-4 inline-block rounded-xl bg-[#e52634] px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-90">Specify Xbloc² for Your Project</a>
+          <a
+            href="#rfq"
+            className="mt-4 inline-block rounded-xl bg-[#e52634] px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-90"
+          >
+            Specify Xbloc² for Your Project
+          </a>
         </div>
       </Container>
-      <div className="border-t py-6 text-center text-xs text-neutral-500">© {new Date().getFullYear()} Xbloc². All rights reserved.</div>
+      <div className="border-t py-6 text-center text-xs text-neutral-500">
+        © {new Date().getFullYear()} Xbloc². All rights reserved.
+      </div>
     </footer>
   );
 }
 
+/* ---------- Utils ---------- */
+
 function toUSD(n) {
-  return new Intl.NumberFormat(undefined, { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n || 0);
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(n || 0);
 }

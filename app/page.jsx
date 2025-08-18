@@ -85,8 +85,8 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative h-[68vh] min-h-[560px] w-full overflow-hidden border-b">
-      {/* Background video (hidden for prefers-reduced-motion) */}
+    <section className="relative h-[64vh] min-h-[520px] w-full overflow-hidden border-b">
+      {/* Background video (hidden if user prefers reduced motion) */}
       <video
         autoPlay
         muted
@@ -94,38 +94,41 @@ function Hero() {
         playsInline
         preload="auto"
         poster="/xbloc2-logo.svg"
+        aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
       >
         <source src="/Building-project_2.mp4" type="video/mp4" />
       </video>
 
-      {/* Color scrim + soft gradients */}
+      {/* Cooling tint + vignette + focus mask */}
       <div className="absolute inset-0">
-        {/* base tint (deeper + calmer) */}
-        <div className="absolute inset-0 bg-[#1f3161]/60" />
-        {/* top and bottom fade to ease the eyes */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/35" />
-        {/* subtle radial focus around content */}
-        <div className="absolute inset-0 [mask-image:radial-gradient(70%_70%_at_30%_40%,black,transparent)] bg-black/20" />
+        {/* Deeper, cooler base to calm the frame */}
+        <div className="absolute inset-0 bg-[#172b54]/70" />
+        {/* Gentle top/bottom gradient to ease edges */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
+        {/* Soft radial focus around copy block */}
+        <div className="absolute inset-0 [mask-image:radial-gradient(60%_60%_at_28%_40%,black,transparent)] bg-black/15" />
+        {/* Subtle vignette to quiet the perimeter */}
+        <div className="pointer-events-none absolute inset-0 ring-1 ring-black/10" />
       </div>
 
       {/* Content */}
       <Container className="relative z-10 h-full">
-        <div className="grid h-full items-center gap-10 md:grid-cols-2">
-          {/* Copy on a soft glass panel for contrast */}
+        <div className="grid h-full items-center gap-8 md:grid-cols-2">
+          {/* Copy panel */}
           <div className="max-w-xl">
-            <div className="rounded-3xl bg-black/15 ring-1 ring-white/10 backdrop-blur-sm p-6 md:p-8">
-              <h1 className="text-white drop-shadow-sm text-4xl sm:text-5xl font-extrabold leading-[1.08] tracking-tight">
+            <div className="rounded-3xl bg-black/20 supports-[backdrop-filter]:backdrop-blur-md ring-1 ring-white/10 p-6 md:p-8">
+              <h1 className="text-white/95 text-4xl sm:text-5xl font-extrabold leading-tight tracking-tight">
                 Fire rated walls
                 <br className="hidden sm:block" /> in one trade.
               </h1>
-              <p className="mt-4 text-base sm:text-lg text-white/85">
+              <p className="mt-3 text-base sm:text-lg text-white/85">
                 AAC panels and blocks with ready dose packs. Up to 4 hour UL-rated assemblies.
                 Single wythe. Fewer trades. Faster close-in.
               </p>
 
               {/* CTAs */}
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-3">
                 <a
                   href="#rfq"
                   className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#203c79] bg-white shadow hover:bg-white/95 transition"
@@ -134,44 +137,56 @@ function Hero() {
                 </a>
                 <a
                   href="#resources"
-                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/30 hover:bg-white/10 transition"
+                  className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/25 hover:bg-white/10 transition"
                 >
                   Download the Technical Brochure
                 </a>
               </div>
 
               {/* Bullets */}
-              <ul className="mt-5 grid gap-2 text-sm text-white/90">
+              <ul className="mt-4 grid gap-1.5 text-sm text-white/90">
                 <li className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-white" /> Non combustible envelope
+                  <ShieldCheck className="h-4 w-4 text-white/95" /> Non combustible envelope
                 </li>
                 <li className="flex items-center gap-2">
-                  <Flame className="h-4 w-4 text-[#ff6b6b]" /> Up to 4 hour fire rating
+                  <Flame className="h-4 w-4 text-[#ff8a8a]" /> Up to 4 hour fire rating
                 </li>
                 <li className="flex items-center gap-2">
-                  <HardHat className="h-4 w-4 text-white" /> One inspection path
+                  <HardHat className="h-4 w-4 text-white/95" /> One inspection path
                 </li>
               </ul>
             </div>
           </div>
 
-          {/* Stats card - lighter, less contrasty */}
+          {/* Stats card */}
           <div className="md:justify-self-end">
-            <div className="rounded-3xl bg-white/10 backdrop-blur-md ring-1 ring-white/15 shadow-[0_8px_28px_rgba(0,0,0,0.25)] p-6 md:p-8">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Stat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white" />} />
-                <Stat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white" />} />
-                <Stat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white" />} />
-                <Stat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4 text-white" />} />
+            <div className="rounded-3xl bg-white/12 supports-[backdrop-filter]:backdrop-blur-lg ring-1 ring-white/15 shadow-[0_6px_24px_rgba(0,0,0,0.22)] p-6 md:p-8">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Stat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white/90" />} />
+                <Stat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white/90" />} />
+                <Stat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white/90" />} />
+                <Stat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4 text-white/90" />} />
               </div>
-              <p className="mt-4 text-xs text-white/70">
-                * Example material + labor snapshot for thin cladding. Project conditions vary. Verify with engineering.
+              <p className="mt-3 text-[11px] leading-relaxed text-white/70">
+                * Material + labor snapshot for thin cladding. Conditions vary. Verify with engineering.
               </p>
             </div>
           </div>
         </div>
       </Container>
     </section>
+  );
+}
+
+function Stat({ label, value, icon }) {
+  return (
+    <div className="rounded-2xl ring-1 ring-white/15 bg-white/8 p-4 shadow-sm">
+      <div className="flex items-center gap-2 text-white/75">
+        {icon}
+        <span className="text-[11px] uppercase tracking-wide">{label}</span>
+      </div>
+      <div className="mt-1 text-[22px] font-bold text-white/95">{value}</div>
+    </div>
   );
 }
 

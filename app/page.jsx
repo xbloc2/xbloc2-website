@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import {
   Flame,
   Factory,
@@ -14,12 +14,19 @@ import {
   Building2,
   Play,
   BookOpen,
+  Image as ImageIcon,
+  X as CloseIcon,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 /**
  * Xbloc² Landing Page — Next.js + Tailwind
- * Brand colors: Primary #203c79, Accent #e52634
- * Logo file: /public/xbloc2-logo.svg
+ * Brand: Primary #203c79, Accent #e52634
+ * Static assets:
+ *   - /public/xbloc2-logo.svg
+ *   - /public/icons/* (your uploaded icons)
+ *   - /public/gallery/* (you will upload images/clips)
  */
 
 export default function Xbloc2LandingPage() {
@@ -29,6 +36,8 @@ export default function Xbloc2LandingPage() {
       <Hero />
       <ProofBar />
       <CTACluster />
+      <AudienceTabs />
+      <Gallery />
       <ValueTiles />
       <Compare />
       <DosePacks />
@@ -39,7 +48,7 @@ export default function Xbloc2LandingPage() {
   );
 }
 
-/* --------------------------------- UI Bits -------------------------------- */
+/* --------------------------------- Shared -------------------------------- */
 
 function Container({ children, className = "" }) {
   return (
@@ -50,7 +59,6 @@ function Container({ children, className = "" }) {
 }
 
 function BrandWordmark() {
-  // Always use the image (no text fallback) so mobile shows the SVG wordmark
   return (
     <div className="flex items-center">
       <img
@@ -69,8 +77,9 @@ function Navbar() {
       <Container className="flex h-16 items-center justify-between gap-4">
         <BrandWordmark />
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-700">
+          <a href="#audiences" className="hover:text-neutral-900">Solutions</a>
           <a href="#why" className="hover:text-neutral-900">Why AAC</a>
-          <a href="#resources" className="hover:text-neutral-900">Resources</a>
+          <a href="#gallery" className="hover:text-neutral-900">Gallery</a>
           <a href="#calc" className="hover:text-neutral-900">Calculator</a>
           <a href="#rfq" className="hover:text-neutral-900">Contact</a>
         </nav>
@@ -103,33 +112,16 @@ function Hero() {
         >
           <source src="/Building-project_2.mp4" type="video/mp4" />
         </video>
-        {/* Requested overlay: rgb(18,74,214) at ~0.7, plus subtle gradient */}
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: "rgba(18,74,214,0.70)" }}
-        />
+        {/* Overlay */}
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(18,74,214,0.70)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/25" />
       </div>
 
       {/* Content */}
       <Container className="relative z-10">
-        <div
-          className="
-            grid gap-5 sm:gap-6 md:gap-10
-            py-10 sm:py-14 md:py-20
-            md:grid-cols-2 md:items-start
-          "
-        >
+        <div className="grid gap-5 sm:gap-6 md:gap-10 py-10 sm:py-14 md:py-20 md:grid-cols-2 md:items-start">
           {/* Card 1 - Content */}
-          <div
-            className="
-              rounded-3xl
-              bg-neutral-900/65 ring-1 ring-white/15
-              backdrop-blur-md
-              p-5 sm:p-6 md:p-8
-              text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)]
-            "
-          >
+          <div className="rounded-3xl bg-neutral-900/65 ring-1 ring-white/15 backdrop-blur-md p-5 sm:p-6 md:p-8 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-[1.1] tracking-tight">
               Fire rated walls<br className="hidden sm:block" /> in one trade.
             </h1>
@@ -143,27 +135,19 @@ function Hero() {
             <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3">
               <a
                 href="#rfq"
-                className="
-                  inline-flex items-center justify-center
-                  rounded-2xl px-5 py-3 text-sm font-semibold
-                  text-[#203c79] bg-white shadow-md hover:shadow-lg hover:bg-white/95 transition
-                "
+                className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#203c79] bg-white shadow-md hover:shadow-lg hover:bg-white/95 transition"
               >
                 Start Your Project Assessment
               </a>
               <a
                 href="#resources"
-                className="
-                  inline-flex items-center justify-center
-                  rounded-2xl px-5 py-3 text-sm font-semibold
-                  text-white/95 ring-1 ring-white/25 hover:bg-white/10 transition
-                "
+                className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/25 hover:bg-white/10 transition"
               >
                 Download the Technical Brochure
               </a>
             </div>
 
-            {/* Bullets (original icons) */}
+            {/* Bullets */}
             <ul className="mt-5 grid gap-2 text-sm text-white/90">
               <li className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-white" />
@@ -180,44 +164,16 @@ function Hero() {
             </ul>
           </div>
 
-          {/* Card 2 - Stats (original icons) */}
-          <div
-            className="
-              rounded-3xl
-              bg-neutral-900/55 ring-1 ring-white/15
-              backdrop-blur-md
-              p-5 md:p-6 lg:p-7
-              text-white
-              shadow-[0_10px_30px_rgba(0,0,0,0.25)]
-              md:justify-self-end
-              w-full md:w-[460px] lg:w-[520px] xl:w-[560px]
-            "
-          >
+          {/* Card 2 - Stats */}
+          <div className="rounded-3xl bg-neutral-900/55 ring-1 ring-white/15 backdrop-blur-md p-5 md:p-6 lg:p-7 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] md:justify-self-end w-full md:w-[460px] lg:w-[520px] xl:w-[560px]">
             <div className="grid gap-4 sm:grid-cols-2">
-              <HeroStat
-                label="Install speed"
-                value="Fewer trades"
-                icon={<Factory className="h-4 w-4 text-white" />}
-              />
-              <HeroStat
-                label="Fire rating"
-                value="Up to 4h"
-                icon={<Flame className="h-4 w-4 text-white" />}
-              />
-              <HeroStat
-                label="Typical cost"
-                value="$3.12+/sf*"
-                icon={<LineChart className="h-4 w-4 text-white" />}
-              />
-              <HeroStat
-                label="Inspection"
-                value="Single path"
-                icon={<ClipboardList className="h-4 w-4 text-white" />}
-              />
+              <HeroStat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white" />} />
+              <HeroStat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white" />} />
+              <HeroStat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white" />} />
+              <HeroStat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4 text-white" />} />
             </div>
             <p className="mt-4 text-xs text-white/75">
-              * Example material + labor snapshot for thin cladding. Project
-              conditions vary. Verify with engineering.
+              * Example material + labor snapshot for thin cladding. Project conditions vary. Verify with engineering.
             </p>
           </div>
         </div>
@@ -273,11 +229,7 @@ function CTACluster() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <CTAButton href="#rfq" label="Request a Technical Consultation" />
           <CTAButton href="#rfq" label="Get Design Support" variant="outline" />
-          <CTAButton
-            href="#resources"
-            label="Specify Xbloc² for Your Project"
-            variant="ghost"
-          />
+          <CTAButton href="#resources" label="Specify Xbloc² for Your Project" variant="ghost" />
           <CTAButton href="#rfq" label="Start Your Project Assessment" accent />
         </div>
       </Container>
@@ -286,17 +238,262 @@ function CTACluster() {
 }
 
 function CTAButton({ href, label, variant = "solid", accent = false }) {
-  const base =
-    "rounded-2xl px-5 py-3 text-sm font-semibold shadow flex items-center justify-center";
+  const base = "rounded-2xl px-5 py-3 text-sm font-semibold shadow flex items-center justify-center";
   const styles = {
     solid: `${accent ? "bg-[#e52634]" : "bg-[#203c79]"} text-white hover:opacity-90`,
     outline: "border border-[#203c79] text-[#203c79] hover:bg-[#203c79]/5",
     ghost: "border border-transparent text-[#203c79] hover:bg-[#203c79]/5",
   }[variant];
   return (
-    <a href={href} className={`${base} ${styles}`}>
-      {label}
-    </a>
+    <a href={href} className={`${base} ${styles}`}>{label}</a>
+  );
+}
+
+/* ------------------------------ Audience Tabs ----------------------------- */
+
+const AUDIENCE_TABS = [
+  { key: "Builders", icon: "/icons/builders.svg" },
+  { key: "Installers", icon: "/icons/installers.svg" },
+  { key: "Architects", icon: "/icons/architects.svg" },
+  { key: "Homeowners", icon: "/icons/homeowners.svg" },
+];
+
+const AUDIENCE_CARDS = {
+  Builders: [
+    { title: "Proven and compliant systems", body: "UL assemblies aligned with ASTM, TMS, and ACI guidance." },
+    { title: "Strong and solid", body: "Single wythe AAC for rigid, robust walls and shafts." },
+    { title: "Quality and speed", body: "Fewer trades. One inspection path. Faster close-in." },
+    { title: "Fire resistant", body: "Up to 4-hour assemblies for code required separations." },
+  ],
+  Installers: [
+    { title: "Strong and solid", body: "Accurate modules with predictable handling on site." },
+    { title: "Quality and speed", body: "Straightforward install flow with minimal steps." },
+    { title: "Fire resistant", body: "Meets rated wall requirements with simple details." },
+    { title: "Sustainable", body: "Lower embodied mass vs conventional alternatives." },
+  ],
+  Architects: [
+    { title: "Proven and compliant systems", body: "Reference UL U-series and detail with CAD files." },
+    { title: "Strong and solid", body: "Robust assemblies that simplify envelope coordination." },
+    { title: "Energy efficient", body: "Thermal and acoustic benefits built into the wall." },
+    { title: "Sustainable", body: "Material efficiency and lifecycle performance." },
+  ],
+  Homeowners: [
+    { title: "Strong and solid", body: "Quiet, sturdy walls that feel finished out of the box." },
+    { title: "Energy efficient", body: "Comfortable interiors with fewer thermal bridges." },
+    { title: "Noise reduction", body: "Acoustic mass for calmer rooms and hallways." },
+    { title: "Design versatility", body: "Accepts common finishes for clean interiors and exteriors." },
+  ],
+};
+
+function AudienceTabs() {
+  const [active, setActive] = useState("Builders");
+
+  return (
+    <section id="audiences" className="py-16 sm:py-20">
+      <Container>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-3xl font-bold tracking-tight">Solutions by audience</h2>
+          <a href="#rfq" className="hidden sm:inline-block rounded-xl border border-[#203c79] px-4 py-2 text-sm font-semibold text-[#203c79] hover:bg-[#203c79]/5">
+            Get Design Support
+          </a>
+        </div>
+
+        {/* Tabs */}
+        <div className="mt-6 overflow-x-auto">
+          <div className="inline-flex gap-2 rounded-2xl border bg-white p-2 shadow-sm">
+            {AUDIENCE_TABS.map((t) => {
+              const isActive = active === t.key;
+              return (
+                <button
+                  key={t.key}
+                  onClick={() => setActive(t.key)}
+                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition ${
+                    isActive ? "bg-[#203c79] text-white" : "text-neutral-700 hover:bg-neutral-50"
+                  }`}
+                >
+                  {/* Optional icon files you placed in /public/icons/ */}
+                  <img src={t.icon} alt="" className="h-4 w-4" />
+                  {t.key}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Cards */}
+        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {AUDIENCE_CARDS[active].map((c) => (
+            <div key={c.title} className="rounded-3xl border p-6 shadow-sm">
+              <div className="flex items-center gap-2 text-neutral-500">
+                <ImageIcon className="h-5 w-5" />
+                <span className="text-xs uppercase tracking-wide">For {active}</span>
+              </div>
+              <h3 className="mt-2 text-lg font-semibold">{c.title}</h3>
+              <p className="mt-2 text-neutral-700">{c.body}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </section>
+  );
+}
+
+/* -------------------------------- Gallery --------------------------------- */
+
+const GALLERY_ITEMS = [
+  // Replace with your uploads in /public/gallery/
+  { src: "/gallery/placement-crew-001.jpg", alt: "Panel placement with 3-person crew", tag: "Installers" },
+  { src: "/gallery/facade-finished-002.webp", alt: "Finished facade close-up", tag: "Builders" },
+  { src: "/gallery/shaftwall-003.jpg", alt: "AAC shaftwall assembly detail", tag: "Architects" },
+  { src: "/gallery/plant-qc-004.jpg", alt: "Manufacturing QC check", tag: "Builders" },
+  { src: "/gallery/interior-quiet-005.jpg", alt: "Quiet interior partition", tag: "Homeowners" },
+  { src: "/gallery/fire-demo-006.jpg", alt: "Fire rating demo setup", tag: "Builders" },
+  { src: "/gallery/placement-clip-007.mp4", alt: "Placement time-lapse", tag: "Installers", type: "video" },
+  { src: "/gallery/finish-skim-008.jpg", alt: "Skim and finish step", tag: "Installers" },
+  { src: "/gallery/section-detail-009.jpg", alt: "Section detail for spec review", tag: "Architects" },
+  { src: "/gallery/exterior-010.webp", alt: "Exterior wall under daylight", tag: "Homeowners" },
+];
+
+const GALLERY_FILTERS = ["All", "Builders", "Installers", "Architects", "Homeowners"];
+
+function Gallery() {
+  const [filter, setFilter] = useState("All");
+  const items = useMemo(
+    () => (filter === "All" ? GALLERY_ITEMS : GALLERY_ITEMS.filter((i) => i.tag === filter)),
+    [filter]
+  );
+
+  const [open, setOpen] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  const openAt = (i) => {
+    setIndex(i);
+    setOpen(true);
+  };
+
+  const close = useCallback(() => setOpen(false), []);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + items.length) % items.length), [items.length]);
+  const next = useCallback(() => setIndex((i) => (i + 1) % items.length), [items.length]);
+
+  // Keyboard controls for lightbox
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, close, prev, next]);
+
+  return (
+    <section id="gallery" className="py-16 sm:py-20 border-t border-b bg-neutral-50/50">
+      <Container>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-3xl font-bold tracking-tight">Photo gallery</h2>
+          <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-neutral-600">
+            <span>Tap a tile to open</span>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          {GALLERY_FILTERS.map((f) => {
+            const active = f === filter;
+            return (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`rounded-full border px-3 py-1 text-sm font-semibold ${
+                  active ? "bg-[#203c79] text-white" : "text-[#203c79] hover:bg-[#203c79]/5"
+                }`}
+              >
+                {f}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Grid */}
+        <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3 [column-fill:_balance]">
+          {items.map((it, i) => (
+            <figure
+              key={it.src}
+              className="mb-4 overflow-hidden break-inside-avoid rounded-2xl border bg-white shadow-sm cursor-zoom-in"
+              onClick={() => openAt(i)}
+            >
+              {it.type === "video" ? (
+                <video src={it.src} className="w-full h-auto" muted playsInline preload="metadata" />
+              ) : (
+                <img src={it.src} alt={it.alt} className="w-full h-auto" loading="lazy" />
+              )}
+              <figcaption className="p-3 text-sm text-neutral-700">{it.alt}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </Container>
+
+      {/* Lightbox */}
+      {open && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center"
+          onClick={close}
+        >
+          <button
+            className="absolute top-4 right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            onClick={(e) => {
+              e.stopPropagation();
+              close();
+            }}
+            aria-label="Close"
+          >
+            <CloseIcon className="h-6 w-6" />
+          </button>
+
+          <button
+            className="absolute left-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            onClick={(e) => {
+              e.stopPropagation();
+              prev();
+            }}
+            aria-label="Previous"
+          >
+            <ChevronLeft className="h-7 w-7" />
+          </button>
+
+          <button
+            className="absolute right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
+            onClick={(e) => {
+              e.stopPropagation();
+              next();
+            }}
+            aria-label="Next"
+          >
+            <ChevronRight className="h-7 w-7" />
+          </button>
+
+          <div className="max-w-6xl w-[92vw] max-h-[82vh]" onClick={(e) => e.stopPropagation()}>
+            {items[index]?.type === "video" ? (
+              <video
+                src={items[index].src}
+                className="max-h-[82vh] w-full rounded-xl"
+                controls
+                autoPlay
+                playsInline
+              />
+            ) : (
+              <img
+                src={items[index].src}
+                alt={items[index].alt}
+                className="max-h-[82vh] w-full object-contain rounded-xl"
+              />
+            )}
+            <div className="mt-3 text-center text-sm text-white/80">{items[index].alt}</div>
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -327,8 +524,7 @@ function ValueTiles() {
           Why AAC with Xbloc<sup className="relative top-[-0.3em] text-[0.6em]">2</sup>
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
-          Technical. Code aligned. Straightforward install. We keep it simple
-          and fast for builders, GCs, and design teams.
+          Technical. Code aligned. Straightforward install. We keep it simple and fast for builders, GCs, and design teams.
         </p>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tiles.map((t) => (
@@ -361,12 +557,9 @@ function Compare() {
   return (
     <section className="border-y bg-neutral-50/50 py-16" aria-labelledby="compare-heading">
       <Container>
-        <h2 id="compare-heading" className="text-3xl font-bold tracking-tight">
-          AAC fire walls vs gypsum systems
-        </h2>
+        <h2 id="compare-heading" className="text-3xl font-bold tracking-tight">AAC fire walls vs gypsum systems</h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
-          Typical differences shown for planning. Confirm final assemblies and
-          details with your engineer and AHJ.
+          Typical differences shown for planning. Confirm final assemblies and details with your engineer and AHJ.
         </p>
         <div className="mt-8 overflow-hidden rounded-2xl border bg-white shadow-sm">
           <table className="w-full text-left text-sm">
@@ -397,18 +590,9 @@ function Compare() {
 
 function DosePacks() {
   const items = [
-    {
-      title: "Thinset upgrade",
-      points: ["Higher compressive strength", "Better flexural performance", "Low permeability"],
-    },
-    {
-      title: "Stucco + finish",
-      points: ["Cleaner bond to AAC", "Fast cure profile", "No special equipment"],
-    },
-    {
-      title: "Repair + patch",
-      points: ["Field friendly", "Strong adhesion", "Consistent results"],
-    },
+    { title: "Thinset upgrade", points: ["Higher compressive strength", "Better flexural performance", "Low permeability"] },
+    { title: "Stucco + finish", points: ["Cleaner bond to AAC", "Fast cure profile", "No special equipment"] },
+    { title: "Repair + patch", points: ["Field friendly", "Strong adhesion", "Consistent results"] },
   ];
   return (
     <section className="py-16" aria-labelledby="dose-heading">
@@ -417,8 +601,7 @@ function DosePacks() {
           Xbloc<sup className="relative top-[-0.3em] text-[0.6em]">2</sup> dose packs
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
-          Ready-to-use admixture packs that boost performance in thinset,
-          stucco, repair, and finishes. No special gear.
+          Ready-to-use admixture packs that boost performance in thinset, stucco, repair, and finishes. No special gear.
         </p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((card) => (
@@ -462,9 +645,7 @@ function Calculator() {
     <section id="calc" className="border-y bg-neutral-50/50 py-16" aria-labelledby="calc-heading">
       <Container>
         <div className="flex items-center justify-between gap-6">
-          <h2 id="calc-heading" className="text-3xl font-bold tracking-tight">
-            AAC wall calculator
-          </h2>
+          <h2 id="calc-heading" className="text-3xl font-bold tracking-tight">AAC wall calculator</h2>
           <div className="hidden md:flex items-center gap-2 rounded-full border bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
             <CalcIcon className="h-4 w-4" /> Budgeting tool only
           </div>
@@ -512,12 +693,8 @@ function Calculator() {
 function KPI({ label, value, highlight = false }) {
   return (
     <div className={`rounded-2xl border p-4 shadow-sm ${highlight ? "bg-[#203c79] text-white" : "bg-white"}`}>
-      <div className={`text-xs uppercase tracking-wide ${highlight ? "text-neutral-200" : "text-neutral-500"}`}>
-        {label}
-      </div>
-      <div className={`mt-1 text-2xl font-bold tabular-nums ${highlight ? "text-white" : "text-neutral-900"}`}>
-        {value}
-      </div>
+      <div className={`text-xs uppercase tracking-wide ${highlight ? "text-neutral-200" : "text-neutral-500"}`}>{label}</div>
+      <div className={`mt-1 text-2xl font-bold tabular-nums ${highlight ? "text-white" : "text-neutral-900"}`}>{value}</div>
     </div>
   );
 }
@@ -659,16 +836,10 @@ ${form.message}`
                 Download the Technical Brochure, UL letters, CAD details, and install guides in Resources.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
-                <a
-                  href="#resources"
-                  className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100"
-                >
+                <a href="#resources" className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100">
                   <BookOpen className="h-4 w-4" /> Explore Case Studies
                 </a>
-                <a
-                  href="#resources"
-                  className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100"
-                >
+                <a href="#resources" className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100">
                   <Play className="h-4 w-4" /> Watch Placement in Action
                 </a>
               </div>
@@ -704,9 +875,7 @@ function SelectField({ label, value, onChange, options }) {
         className="mt-1 w-full rounded-xl border bg-white px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
       >
         {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
+          <option key={o} value={o}>{o}</option>
         ))}
       </select>
     </label>

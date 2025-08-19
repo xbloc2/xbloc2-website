@@ -322,6 +322,12 @@ function AudienceTabs() {
     }
   }, [active]);
 
+  useEffect(() => {
+  const onResize = () => setUnderline((u) => ({ ...u })); // trigger recalc
+  window.addEventListener("resize", onResize);
+  return () => window.removeEventListener("resize", onResize);
+}, []);
+
   const content = {
     Builders: [
       {

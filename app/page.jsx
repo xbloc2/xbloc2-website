@@ -39,15 +39,24 @@ export default function Xbloc2LandingPage() {
       <Footer />
       {/* Keyframes for swipe/fade animations */}
       <style jsx global>{`
-        @keyframes swipeUp {
-          0% { opacity: 0; transform: translateY(40px) }
-          100% { opacity: 1; transform: translateY(0) }
-        }
-        @keyframes fadeInScale {
-          0% { opacity: 0; transform: scale(1.02) }
-          100% { opacity: 1; transform: scale(1) }
-        }
-      `}</style>
+  @keyframes swipeUp {
+    0%   { opacity: 0; transform: translateY(40px) }
+    100% { opacity: 1; transform: translateY(0) }
+  }
+  @keyframes fadeInScale {
+    0%   { opacity: 0; transform: scale(1.02) }
+    100% { opacity: 1; transform: scale(1) }
+  }
+  @keyframes kenBurns {
+    0%   { transform: scale(1.05) translate3d(0, 0, 0); }
+    100% { transform: scale(1.12) translate3d(2%, 1%, 0); }
+  }
+  @keyframes slideUp {
+    0%   { opacity: 0; transform: translateY(18px) }
+    100% { opacity: 1; transform: translateY(0) }
+  }
+`}</style>
+
     </main>
   );
 }

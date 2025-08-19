@@ -504,18 +504,20 @@ function ApplicationsAccordion() {
   const [open, setOpen] = useState("Residential");
 
   // Keyboard support (left/right moves selection)
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      const idx = panels.findIndex(p => p.key === open);
-      if (e.key === "ArrowRight") {
-        setOpen(panels[(idx + 1) % panels.length].key);
-      } else if (e.key === "ArrowLeft") {
-        setOpen(panels[(idx - 1 + panels.length) % panels.length].key);
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
+useEffect(() => {
+  /** @param {KeyboardEvent} e */
+  const onKey = (e) => {
+    const idx = panels.findIndex((p) => p.key === open);
+    if (e.key === "ArrowRight") {
+      setOpen(panels[(idx + 1) % panels.length].key);
+    } else if (e.key === "ArrowLeft") {
+      setOpen(panels[(idx - 1 + panels.length) % panels.length].key);
+    }
+  };
+  window.addEventListener("keydown", onKey);
+  return () => window.removeEventListener("keydown", onKey);
+}, [open]);
+
 
   return (
     <section className="py-16">

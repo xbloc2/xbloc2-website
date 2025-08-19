@@ -970,28 +970,23 @@ function Footer() {
       </Container>
 
       <div className="border-t py-6 text-center text-xs text-neutral-500 space-y-3">
-        <p>© {new Date().getFullYear()} Xbloc². All rights reserved.</p>
+        <p className="text-xs text-neutral-500 text-center">
+  © {new Date().getFullYear()} Xbloc². All rights reserved.<br /><br />
+  Information on this website is provided as general guidance only and does not
+  constitute a recommendation to use any of our products.<br />
+  Always seek professional advice to confirm that Xbloc² products and their intended
+  applications meet your requirements.<br /><br />
+  While product images and colors are shown as accurately as possible, we recommend
+  reviewing physical samples prior to purchase since digital representations may affect
+  appearance.<br />
+  Variations in color and surface finish may occur between batches due to standard
+  manufacturing processes and raw materials.<br /><br />
+  For further information, please contact Xbloc² at{" "}
+  <a href="tel:8881234567" className="underline underline-offset-2">
+    888-123-4567
+  </a>.
+</p>
 
-        <p>
-          Information on this website is provided as general guidance only and does not
-          constitute a recommendation to use any of our products. You should always seek
-          professional advice to confirm that Xbloc2 products and their intended applications
-          meet your specific requirements.
-        </p>
-
-        <p>
-          While product images and colors are shown as accurately as possible, we recommend
-          reviewing physical samples prior to purchase since digital representations may affect
-          appearance. Additionally, variations in color and surface finish may occur between
-          batches due to standard manufacturing processes and raw materials.
-        </p>
-
-        <p>
-          For further information, please contact Xbloc2 at{" "}
-          <a href="tel:8881234567" className="underline underline-offset-2">
-            888-123-4567
-          </a>.
-        </p>
       </div>
     </footer>
   );

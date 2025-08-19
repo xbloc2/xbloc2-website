@@ -35,7 +35,7 @@ export default function Xbloc2LandingPage() {
       <Compare />
       <DosePacks />
       <Calculator />
-      <RFQ />                 {/* Dark hero-style section */}
+      <RFQ />                 {/* Dark hero-style section w/ image */}
       <Footer />
 
       {/* Keyframes and motion fallbacks */}
@@ -89,7 +89,7 @@ function BrandWordmark() {
 
 function Navbar() {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-black/5 bg-white/80 backdrop-blur">
+    <header className="sticky top-0 z-40 w-full border-b border-[gainsboro] bg-white/80 backdrop-blur">
       <Container className="flex h-16 items-center justify-between gap-4">
         <BrandWordmark />
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-700">
@@ -113,8 +113,17 @@ function Navbar() {
 
 function Hero() {
   return (
-    <section className="relative w-full overflow-hidden border-b">
+    <section className="relative w-full overflow-hidden border-b border-[gainsboro]">
       <div className="absolute inset-0">
+        {/* Fallback image behind the video */}
+        <img
+          src="/gallery/building-sketch-1536x1024.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover"
+          draggable={false}
+        />
+
         <video
           autoPlay
           muted
@@ -126,6 +135,7 @@ function Hero() {
         >
           <source src="/Building-project_2.mp4" type="video/mp4" />
         </video>
+
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(18,74,214,0.70)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/25" />
       </div>
@@ -212,7 +222,7 @@ function ProofBar() {
     { icon: <Building2 className="h-4 w-4" />, label: "ACI guidance" },
   ];
   return (
-    <section className="border-b bg-neutral-50/60">
+    <section className="border-b border-[gainsboro] bg-neutral-50/60">
       <Container className="flex flex-wrap items-center justify-center gap-4 py-4 sm:gap-6">
         {items.map((it, i) => (
           <div
@@ -437,7 +447,7 @@ function AudienceTabs() {
   };
 
   return (
-    <section className="py-12 border-t">
+    <section className="py-12 border-t border-[gainsboro]">
       <Container>
         <div ref={tabBarRef} className="relative flex flex-wrap gap-8 text-sm font-semibold text-neutral-600">
           {tabs.map((t, i) => (
@@ -555,7 +565,7 @@ function Compare() {
     { label: "Schedule risk", aac: "Lower", gypsum: "Higher" },
   ];
   return (
-    <section className="border-y bg-neutral-50/50 py-16" aria-labelledby="compare-heading">
+    <section className="border-y border-[gainsboro] bg-neutral-50/50 py-16" aria-labelledby="compare-heading">
       <Container>
         <h2 id="compare-heading" className="text-3xl font-bold tracking-tight">AAC fire walls vs gypsum systems</h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
@@ -651,7 +661,7 @@ function Calculator() {
   const total = materialCost + laborCost;
 
   return (
-    <section id="calc" className="border-y bg-neutral-50/50 py-16" aria-labelledby="calc-heading">
+    <section id="calc" className="border-y border-[gainsboro] bg-neutral-50/50 py-16" aria-labelledby="calc-heading">
       <Container>
         <div className="flex items-center justify-between gap-6">
           <h2 id="calc-heading" className="text-3xl font-bold tracking-tight">AAC wall calculator</h2>
@@ -778,12 +788,13 @@ ${form.message}`
   }, [form]);
 
   return (
-    <section id="rfq" className="relative py-16" aria-labelledby="rfq-heading">
-      {/* background image + overlay */}
+    <section id="rfq" className="relative py-16">
+      {/* Background image + overlays (same as hero) */}
       <div className="pointer-events-none absolute inset-0">
         <img
           src="/gallery/building-sketch-1536x1024.png"
           alt=""
+          aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover"
           draggable={false}
         />
@@ -797,9 +808,10 @@ ${form.message}`
           Send plans or a quick scope. We reply with assemblies, quantities, and a schedule plan.
         </p>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        {/* Stretch both cards to equal height on desktop */}
+        <div className="mt-8 grid gap-6 lg:grid-cols-2 items-stretch">
           {/* Left: frosted dark form card */}
-          <form className="rounded-3xl ring-1 ring-white/15 bg-neutral-900/60 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+          <form className="h-full flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/60 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
             <h3 className="text-lg font-semibold text-white">Project details</h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <TextField label="Name" value={form.name} onChange={(v) => onChange("name", v)} />
@@ -826,7 +838,7 @@ ${form.message}`
                 placeholder="Upload links to plans, required ratings, and dates"
               />
             </label>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-auto pt-6 flex flex-wrap items-center gap-3">
               <a
                 href={mailtoHref}
                 className="rounded-2xl bg-[#e52634] px-5 py-3 text-sm font-semibold text-white shadow hover:opacity-90"
@@ -843,7 +855,7 @@ ${form.message}`
           </form>
 
           {/* Right: frosted dark info card */}
-          <div className="rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+          <div className="h-full flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
             <h3 className="text-lg font-semibold text-white">What to include</h3>
             <ul className="mt-3 list-disc space-y-2 pl-6 text-sm text-white/85">
               <li>Plan pages and wall schedules</li>
@@ -875,6 +887,7 @@ ${form.message}`
                 </a>
               </div>
             </div>
+            <div className="mt-auto" />
           </div>
         </div>
       </Container>
@@ -919,7 +932,7 @@ function SelectField({ label, value, onChange, options }) {
 
 function Footer() {
   return (
-    <footer id="resources" className="border-t bg-neutral-50/50">
+    <footer id="resources" className="border-t border-[gainsboro] bg-neutral-50/50">
       <Container className="grid gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <div className="flex items-center gap-2 text-neutral-800">
@@ -974,7 +987,22 @@ function Footer() {
           </a>
         </div>
       </Container>
-      <div className="border-t py-6 text-center text-xs text-neutral-500">
+
+      {/* Disclosure, left-aligned within site columns */}
+      <div className="border-t border-[gainsboro] py-6">
+        <Container>
+          <p className="text-xs text-neutral-600 max-w-5xl">
+            Information on this website is provided as general guidance only and does not constitute a recommendation to use any of our products.
+            You should always seek professional advice to confirm that Xbloc2 products and their intended applications meet your specific requirements.
+            While product images and colors are shown as accurately as possible, we recommend reviewing physical samples prior to purchase since digital
+            representations may affect appearance. Additionally, variations in color and surface finish may occur between batches due to standard
+            manufacturing processes and raw materials. For further information, please contact Xbloc2 at{" "}
+            <a href="tel:8881234567" className="underline underline-offset-2">888-123-4567</a>.
+          </p>
+        </Container>
+      </div>
+
+      <div className="border-t border-[gainsboro] py-6 text-center text-xs text-neutral-500">
         © {new Date().getFullYear()} Xbloc². All rights reserved.
       </div>
     </footer>

@@ -30,33 +30,36 @@ export default function Xbloc2LandingPage() {
       <ProofBar />
       <CTACluster />
       <ValueTiles />          {/* Why AAC */}
-      <AudienceTabs />        {/* NEW */}
-      <ApplicationsAccordion /> {/* NEW */}
+      <AudienceTabs />        {/* Fixed mobile visibility */}
+      <ApplicationsGallery /> {/* Replaces ApplicationsAccordion */}
       <Compare />
       <DosePacks />
       <Calculator />
       <RFQ />
       <Footer />
-      {/* Keyframes for swipe/fade animations */}
-      <style jsx global>{`
-  @keyframes swipeUp {
-    0%   { opacity: 0; transform: translateY(40px) }
-    100% { opacity: 1; transform: translateY(0) }
-  }
-  @keyframes fadeInScale {
-    0%   { opacity: 0; transform: scale(1.02) }
-    100% { opacity: 1; transform: scale(1) }
-  }
-  @keyframes kenBurns {
-    0%   { transform: scale(1.05) translate3d(0, 0, 0); }
-    100% { transform: scale(1.12) translate3d(2%, 1%, 0); }
-  }
-  @keyframes slideUp {
-    0%   { opacity: 0; transform: translateY(18px) }
-    100% { opacity: 1; transform: translateY(0) }
-  }
-`}</style>
 
+      {/* Keyframes and motion fallbacks */}
+      <style jsx global>{`
+        @keyframes swipeUp {
+          0%   { opacity: 0; transform: translateY(40px) }
+          100% { opacity: 1; transform: translateY(0) }
+        }
+        @keyframes fadeInScale {
+          0%   { opacity: 0; transform: scale(1.02) }
+          100% { opacity: 1; transform: scale(1) }
+        }
+        @keyframes kenBurns {
+          0%   { transform: scale(1.05) translate3d(0, 0, 0); }
+          100% { transform: scale(1.12) translate3d(2%, 1%, 0); }
+        }
+        @keyframes slideUp {
+          0%   { opacity: 0; transform: translateY(18px) }
+          100% { opacity: 1; transform: translateY(0) }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .motion-safe\\:animate-\\[swipeUp_0\\.5s_ease-out_forwards\\] { animation: none !important; }
+        }
+      `}</style>
     </main>
   );
 }
@@ -315,18 +318,25 @@ function AudienceTabs() {
     if (!tabBarRef.current) return;
     const i = tabs.indexOf(active);
     const el = tabRefs.current[i];
-    if (el && tabBarRef.current) {
-      const parentLeft = tabBarRef.current.getBoundingClientRect().left;
-      const rect = el.getBoundingClientRect();
-      setUnderline({ left: rect.left - parentLeft, width: rect.width });
-    }
-  }, [active]);
+    if (!el) return;
+
+    const parentLeft = tabBarRef.current.getBoundingClientRect().left;
+    const rect = el.getBoundingClientRect();
+    setUnderline({ left: rect.left - parentLeft, width: rect.width });
+
+    // Recalc after layout settles
+    const id = requestAnimationFrame(() => {
+      const rect2 = el.getBoundingClientRect();
+      setUnderline({ left: rect2.left - parentLeft, width: rect2.width });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [active, tabs]);
 
   useEffect(() => {
-  const onResize = () => setUnderline((u) => ({ ...u })); // trigger recalc
-  window.addEventListener("resize", onResize);
-  return () => window.removeEventListener("resize", onResize);
-}, []);
+    const onResize = () => setUnderline((u) => ({ ...u })); // trigger recalc
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   const content = {
     Builders: [
@@ -430,7 +440,7 @@ function AudienceTabs() {
   return (
     <section className="py-12 border-t">
       <Container>
-        {/* Tabs row with moving underline, no heading label */}
+        {/* Tabs row with moving underline */}
         <div ref={tabBarRef} className="relative flex flex-wrap gap-8 text-sm font-semibold text-neutral-600">
           {tabs.map((t, i) => (
             <button
@@ -452,12 +462,12 @@ function AudienceTabs() {
           <div className="absolute bottom-0 left-0 right-0 h-px bg-neutral-200" aria-hidden="true" />
         </div>
 
-        {/* Cards with swipeUp stagger on tab switch */}
+        {/* Cards with animation but visible by default on mobile */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {content[active].map((c, i) => (
             <div
               key={`${active}-${c.title}-${i}`}
-              className="rounded-3xl border p-6 shadow-sm opacity-0 animate-[swipeUp_0.5s_ease_forwards]"
+              className="rounded-3xl border p-6 shadow-sm motion-safe:animate-[swipeUp_0.5s_ease-out_forwards]"
               style={{ animationDelay: `${i * 100}ms` }}
             >
               <img src={c.icon} alt="" className="h-12 w-12 mb-4" />
@@ -471,167 +481,71 @@ function AudienceTabs() {
   );
 }
 
-/* ----------------------- Applications Accordion (animated) ---------------- */
+/* --------------------- Applications Gallery (replacement) ------------------ */
 
-function ApplicationsAccordion() {
-  const panels = [
+function ApplicationsGallery() {
+  const cards = [
     {
       key: "Residential",
       img: "/gallery/residential.jpg",
       title: "Residential",
       copy: "Durable, fire-safe, and energy-efficient homes with Xbloc² wall systems.",
-      cta: { href: "#rfq", label: "Specify Xbloc² for Your Project" },
-      overlay: "light",
+      cta: { href: "#rfq", label: "Specify Xbloc²" },
     },
     {
       key: "Apartment",
       img: "/gallery/apartment.jpg",
-      title: "Apartment",
+      title: "Apartments",
       copy: "Faster installation and proven acoustic performance for multi-family and mid-rise.",
       cta: { href: "#design", label: "Get Design Support" },
-      overlay: "light",
     },
     {
       key: "Commercial",
       img: "/gallery/commercial.jpg",
       title: "Commercial",
       copy: "Engineered strength and speed for offices, schools, hospitality, and industrial.",
-      cta: { href: "#rfq", label: "Request a Technical Consultation" },
-      overlay: "dark",
+      cta: { href: "#rfq", label: "Request Consultation" },
     },
   ];
-
-  const [open, setOpen] = useState("Residential");
-
-  // Keyboard support (left/right moves selection)
-useEffect(() => {
-  /** @param {KeyboardEvent} e */
-  const onKey = (e) => {
-    const idx = panels.findIndex((p) => p.key === open);
-    if (e.key === "ArrowRight") {
-      setOpen(panels[(idx + 1) % panels.length].key);
-    } else if (e.key === "ArrowLeft") {
-      setOpen(panels[(idx - 1 + panels.length) % panels.length].key);
-    }
-  };
-  window.addEventListener("keydown", onKey);
-  return () => window.removeEventListener("keydown", onKey);
-}, [open]);
-
 
   return (
     <section className="py-16">
       <Container>
-        <div className="grid gap-8 md:grid-cols-[160px_1fr]">
-          {/* Rail (pills on mobile, vertical on desktop) */}
-          <div className="flex gap-3 md:flex-col md:gap-4">
-            {panels.map((p) => {
-              const active = open === p.key;
-              return (
-                <button
-                  key={p.key}
-                  onClick={() => setOpen(p.key)}
-                  aria-expanded={active}
-                  aria-controls={`panel-${p.key}`}
-                  className={[
-                    "flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition-all",
-                    "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#203c79]",
-                    "md:[writing-mode:vertical-rl] md:rotate-180 md:px-3 md:py-5",
-                    active
-                      ? "bg-[#203c79] text-white shadow-lg md:translate-x-0 md:scale-105"
-                      : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 md:translate-x-0",
-                  ].join(" ")}
-                  style={{ minHeight: "56px" }}
-                >
-                  {p.key}
-                </button>
-              );
-            })}
-          </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {cards.map((c) => (
+            <article
+              key={c.key}
+              className="group relative overflow-hidden rounded-3xl border bg-neutral-900/5 shadow-sm"
+            >
+              <img
+                src={c.img}
+                alt=""
+                className="h-64 w-full object-cover md:h-72 lg:h-80 will-change-transform transition-transform duration-500 group-hover:scale-[1.03]"
+                draggable={false}
+              />
 
-          {/* Hero stage */}
-          <div
-            className="
-              relative overflow-hidden rounded-3xl border bg-neutral-900/5 shadow-sm
-              h-[56vh] min-h-[460px] max-h-[760px] md:h-[68vh]
-            "
-          >
-            {/* Stack all panels and crossfade; only one is pointer-active */}
-            {panels.map((p) => {
-              const active = open === p.key;
-              return (
-                <div
-                  key={p.key}
-                  id={`panel-${p.key}`}
-                  className={`
-                    absolute inset-0 transition-opacity duration-400
-                    ${active ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
-                  `}
-                >
-                  {/* Image layer with ken burns */}
-                  <img
-                    src={p.img}
-                    alt=""
-                    className="
-                      absolute inset-0 h-full w-full object-cover
-                      will-change-transform
-                      animate-[kenBurns_14s_ease-out_forwards]
-                      [transition:transform_600ms_ease] 
-                    "
-                    draggable={false}
-                  />
+              {/* Overlays should not block taps */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
-                  {/* Vignette + color overlay */}
-                  <div
-                    className={`
-                      absolute inset-0
-                      ${p.overlay === "dark" ? "bg-black/45" : "bg-black/30"}
-                    `}
-                  />
-                  <div className="absolute inset-0 pointer-events-none">
-                    {/* subtle vignette */}
-                    <div className="absolute inset-0 bg-[radial-gradient(100%_120%_at_50%_0%,rgba(0,0,0,0.18),transparent_60%)]" />
-                  </div>
-
-                  {/* Content card (glass) */}
-                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-10">
-                    <div
-                      className="
-                        max-w-xl rounded-2xl
-                        bg-white/10 backdrop-blur
-                        ring-1 ring-white/20
-                        p-5 sm:p-6
-                        opacity-0 animate-[slideUp_500ms_ease-out_forwards]
-                      "
-                      style={{ animationDelay: "120ms" }}
-                    >
-                      <h3 className="text-2xl md:text-4xl font-bold text-white drop-shadow-sm">
-                        {p.title}
-                      </h3>
-                      <p className="mt-2 md:mt-3 text-white/90 leading-relaxed">
-                        {p.copy}
-                      </p>
-                      <a
-                        href={p.cta.href}
-                        className="mt-5 inline-block rounded-lg bg-[#e52634] px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
-                      >
-                        {p.cta.label}
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* soft ring for depth */}
-                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/10" />
+              <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                <div className="rounded-2xl bg-white/90 p-4 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+                  <h3 className="text-lg font-semibold">{c.title}</h3>
+                  <p className="mt-1 text-sm text-neutral-700">{c.copy}</p>
+                  <a
+                    href={c.cta.href}
+                    className="mt-4 inline-block rounded-xl bg-[#e52634] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-[#e52634]/40"
+                  >
+                    {c.cta.label}
+                  </a>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            </article>
+          ))}
         </div>
       </Container>
     </section>
   );
 }
-
 
 /* ------------------------------- Comparison ------------------------------- */
 

@@ -503,66 +503,133 @@ function ApplicationsAccordion() {
 
   const [open, setOpen] = useState("Residential");
 
+  // Keyboard support (left/right moves selection)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const idx = panels.findIndex(p => p.key === open);
+      if (e.key === "ArrowRight") {
+        setOpen(panels[(idx + 1) % panels.length].key);
+      } else if (e.key === "ArrowLeft") {
+        setOpen(panels[(idx - 1 + panels.length) % panels.length].key);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   return (
     <section className="py-16">
       <Container>
-        <div className="grid gap-6 md:grid-cols-5">
-          {/* Vertical accordion headers */}
-          <div className="flex md:flex-col gap-3 md:col-span-1">
-            {panels.map((p) => (
-              <button
-                key={p.key}
-                onClick={() => setOpen(p.key)}
-                className={`flex items-center justify-center md:justify-start md:[writing-mode:vertical-rl] md:rotate-180 rounded-xl px-4 py-3 text-sm font-semibold transition
-                  ${open === p.key ? "bg-[#203c79] text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}
-                `}
-                style={{ minHeight: "56px" }}
-                aria-expanded={open === p.key}
-              >
-                {p.key}
-              </button>
-            ))}
+        <div className="grid gap-8 md:grid-cols-[160px_1fr]">
+          {/* Rail (pills on mobile, vertical on desktop) */}
+          <div className="flex gap-3 md:flex-col md:gap-4">
+            {panels.map((p) => {
+              const active = open === p.key;
+              return (
+                <button
+                  key={p.key}
+                  onClick={() => setOpen(p.key)}
+                  aria-expanded={active}
+                  aria-controls={`panel-${p.key}`}
+                  className={[
+                    "flex items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition-all",
+                    "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#203c79]",
+                    "md:[writing-mode:vertical-rl] md:rotate-180 md:px-3 md:py-5",
+                    active
+                      ? "bg-[#203c79] text-white shadow-lg md:translate-x-0 md:scale-105"
+                      : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 md:translate-x-0",
+                  ].join(" ")}
+                  style={{ minHeight: "56px" }}
+                >
+                  {p.key}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Animated panel */}
-          <div className="relative overflow-hidden rounded-2xl border shadow-sm md:col-span-4">
-            {panels.map((p) => (
-              <div
-                key={p.key}
-                className={`${
-                  open === p.key ? "block" : "hidden"
-                } relative h-[440px]`}
-              >
-                <img
-                  src={p.img}
-                  alt={p.title}
-                  className="absolute inset-0 h-full w-full object-cover opacity-0 animate-[fadeInScale_500ms_ease_forwards]"
-                />
+          {/* Hero stage */}
+          <div
+            className="
+              relative overflow-hidden rounded-3xl border bg-neutral-900/5 shadow-sm
+              h-[56vh] min-h-[460px] max-h-[760px] md:h-[68vh]
+            "
+          >
+            {/* Stack all panels and crossfade; only one is pointer-active */}
+            {panels.map((p) => {
+              const active = open === p.key;
+              return (
                 <div
-                  className={`absolute inset-0 ${
-                    p.overlay === "dark" ? "bg-black/45" : "bg-black/30"
-                  }`}
-                />
-                <div className="absolute inset-0 flex items-end">
-                  <div className="p-6 sm:p-8 md:p-10 text-white max-w-xl">
-                    <h3 className="text-3xl font-bold">{p.title}</h3>
-                    <p className="mt-2 text-white/90">{p.copy}</p>
-                    <a
-                      href={p.cta.href}
-                      className="mt-5 inline-block rounded-lg bg-[#e52634] px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
-                    >
-                      {p.cta.label}
-                    </a>
+                  key={p.key}
+                  id={`panel-${p.key}`}
+                  className={`
+                    absolute inset-0 transition-opacity duration-400
+                    ${active ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}
+                  `}
+                >
+                  {/* Image layer with ken burns */}
+                  <img
+                    src={p.img}
+                    alt=""
+                    className="
+                      absolute inset-0 h-full w-full object-cover
+                      will-change-transform
+                      animate-[kenBurns_14s_ease-out_forwards]
+                      [transition:transform_600ms_ease] 
+                    "
+                    draggable={false}
+                  />
+
+                  {/* Vignette + color overlay */}
+                  <div
+                    className={`
+                      absolute inset-0
+                      ${p.overlay === "dark" ? "bg-black/45" : "bg-black/30"}
+                    `}
+                  />
+                  <div className="absolute inset-0 pointer-events-none">
+                    {/* subtle vignette */}
+                    <div className="absolute inset-0 bg-[radial-gradient(100%_120%_at_50%_0%,rgba(0,0,0,0.18),transparent_60%)]" />
                   </div>
+
+                  {/* Content card (glass) */}
+                  <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 md:p-10">
+                    <div
+                      className="
+                        max-w-xl rounded-2xl
+                        bg-white/10 backdrop-blur
+                        ring-1 ring-white/20
+                        p-5 sm:p-6
+                        opacity-0 animate-[slideUp_500ms_ease-out_forwards]
+                      "
+                      style={{ animationDelay: "120ms" }}
+                    >
+                      <h3 className="text-2xl md:text-4xl font-bold text-white drop-shadow-sm">
+                        {p.title}
+                      </h3>
+                      <p className="mt-2 md:mt-3 text-white/90 leading-relaxed">
+                        {p.copy}
+                      </p>
+                      <a
+                        href={p.cta.href}
+                        className="mt-5 inline-block rounded-lg bg-[#e52634] px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
+                      >
+                        {p.cta.label}
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* soft ring for depth */}
+                  <div className="pointer-events-none absolute inset-0 rounded-3xl ring-1 ring-black/10" />
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </Container>
     </section>
   );
 }
+
 
 /* ------------------------------- Comparison ------------------------------- */
 

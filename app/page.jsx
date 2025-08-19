@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Flame,
   Factory,
@@ -29,14 +29,25 @@ export default function Xbloc2LandingPage() {
       <Hero />
       <ProofBar />
       <CTACluster />
-      <ValueTiles />             {/* Why AAC */}
-      <AudienceTabs />           {/* NEW */}
-      <ApplicationsGallery />    {/* NEW */}
+      <ValueTiles />          {/* Why AAC */}
+      <AudienceTabs />        {/* NEW */}
+      <ApplicationsAccordion /> {/* NEW */}
       <Compare />
       <DosePacks />
       <Calculator />
       <RFQ />
       <Footer />
+      {/* Keyframes for swipe/fade animations */}
+      <style jsx global>{`
+        @keyframes swipeUp {
+          0% { opacity: 0; transform: translateY(40px) }
+          100% { opacity: 1; transform: translateY(0) }
+        }
+        @keyframes fadeInScale {
+          0% { opacity: 0; transform: scale(1.02) }
+          100% { opacity: 1; transform: scale(1) }
+        }
+      `}</style>
     </main>
   );
 }
@@ -52,7 +63,6 @@ function Container({ children, className = "" }) {
 }
 
 function BrandWordmark() {
-  // Always use the image (no text fallback) so mobile shows the SVG wordmark
   return (
     <div className="flex items-center">
       <img
@@ -92,7 +102,6 @@ function Navbar() {
 function Hero() {
   return (
     <section className="relative w-full overflow-hidden border-b">
-      {/* Background video */}
       <div className="absolute inset-0">
         <video
           autoPlay
@@ -105,33 +114,13 @@ function Hero() {
         >
           <source src="/Building-project_2.mp4" type="video/mp4" />
         </video>
-        {/* Requested overlay: rgb(18,74,214) at ~0.7, plus subtle gradient */}
-        <div
-          className="absolute inset-0"
-          style={{ backgroundColor: "rgba(18,74,214,0.70)" }}
-        />
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(18,74,214,0.70)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/25" />
       </div>
 
-      {/* Content */}
       <Container className="relative z-10">
-        <div
-          className="
-            grid gap-5 sm:gap-6 md:gap-10
-            py-10 sm:py-14 md:py-20
-            md:grid-cols-2 md:items-start
-          "
-        >
-          {/* Card 1 - Content */}
-          <div
-            className="
-              rounded-3xl
-              bg-neutral-900/65 ring-1 ring-white/15
-              backdrop-blur-md
-              p-5 sm:p-6 md:p-8
-              text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)]
-            "
-          >
+        <div className="grid gap-5 sm:gap-6 md:gap-10 py-10 sm:py-14 md:py-20 md:grid-cols-2 md:items-start">
+          <div className="rounded-3xl bg-neutral-900/65 ring-1 ring-white/15 backdrop-blur-md p-5 sm:p-6 md:p-8 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)]">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold leading-[1.1] tracking-tight">
               Fire rated walls<br className="hidden sm:block" /> in one trade.
             </h1>
@@ -141,31 +130,21 @@ function Hero() {
               assemblies. Single wythe. Fewer trades. Faster close-in.
             </p>
 
-            {/* CTAs */}
             <div className="mt-5 sm:mt-6 flex flex-col sm:flex-row gap-3">
               <a
                 href="#rfq"
-                className="
-                  inline-flex items-center justify-center
-                  rounded-2xl px-5 py-3 text-sm font-semibold
-                  text-[#203c79] bg-white shadow-md hover:shadow-lg hover:bg-white/95 transition
-                "
+                className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-[#203c79] bg-white shadow-md hover:shadow-lg hover:bg-white/95 transition"
               >
                 Start Your Project Assessment
               </a>
               <a
                 href="#resources"
-                className="
-                  inline-flex items-center justify-center
-                  rounded-2xl px-5 py-3 text-sm font-semibold
-                  text-white/95 ring-1 ring-white/25 hover:bg-white/10 transition
-                "
+                className="inline-flex items-center justify-center rounded-2xl px-5 py-3 text-sm font-semibold text-white/95 ring-1 ring-white/25 hover:bg-white/10 transition"
               >
                 Download the Technical Brochure
               </a>
             </div>
 
-            {/* Bullets (original icons) */}
             <ul className="mt-5 grid gap-2 text-sm text-white/90">
               <li className="flex items-center gap-2">
                 <ShieldCheck className="h-4 w-4 text-white" />
@@ -182,44 +161,15 @@ function Hero() {
             </ul>
           </div>
 
-          {/* Card 2 - Stats (original icons) */}
-          <div
-            className="
-              rounded-3xl
-              bg-neutral-900/55 ring-1 ring-white/15
-              backdrop-blur-md
-              p-5 md:p-6 lg:p-7
-              text-white
-              shadow-[0_10px_30px_rgba(0,0,0,0.25)]
-              md:justify-self-end
-              w-full md:w-[460px] lg:w-[520px] xl:w-[560px]
-            "
-          >
+          <div className="rounded-3xl bg-neutral-900/55 ring-1 ring-white/15 backdrop-blur-md p-5 md:p-6 lg:p-7 text-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] md:justify-self-end w-full md:w-[460px] lg:w-[520px] xl:w-[560px]">
             <div className="grid gap-4 sm:grid-cols-2">
-              <HeroStat
-                label="Install speed"
-                value="Fewer trades"
-                icon={<Factory className="h-4 w-4 text-white" />}
-              />
-              <HeroStat
-                label="Fire rating"
-                value="Up to 4h"
-                icon={<Flame className="h-4 w-4 text-white" />}
-              />
-              <HeroStat
-                label="Typical cost"
-                value="$3.12+/sf*"
-                icon={<LineChart className="h-4 w-4 text-white" />}
-              />
-              <HeroStat
-                label="Inspection"
-                value="Single path"
-                icon={<ClipboardList className="h-4 w-4 text-white" />}
-              />
+              <HeroStat label="Install speed" value="Fewer trades" icon={<Factory className="h-4 w-4 text-white" />} />
+              <HeroStat label="Fire rating" value="Up to 4h" icon={<Flame className="h-4 w-4 text-white" />} />
+              <HeroStat label="Typical cost" value="$3.12+/sf*" icon={<LineChart className="h-4 w-4 text-white" />} />
+              <HeroStat label="Inspection" value="Single path" icon={<ClipboardList className="h-4 w-4 text-white" />} />
             </div>
             <p className="mt-4 text-xs text-white/75">
-              * Example material + labor snapshot for thin cladding. Project
-              conditions vary. Verify with engineering.
+              * Example material + labor snapshot for thin cladding. Project conditions vary. Verify with engineering.
             </p>
           </div>
         </div>
@@ -275,11 +225,7 @@ function CTACluster() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <CTAButton href="#rfq" label="Request a Technical Consultation" />
           <CTAButton href="#rfq" label="Get Design Support" variant="outline" />
-          <CTAButton
-            href="#resources"
-            label="Specify Xbloc² for Your Project"
-            variant="ghost"
-          />
+          <CTAButton href="#resources" label="Specify Xbloc² for Your Project" variant="ghost" />
           <CTAButton href="#rfq" label="Start Your Project Assessment" accent />
         </div>
       </Container>
@@ -288,8 +234,7 @@ function CTACluster() {
 }
 
 function CTAButton({ href, label, variant = "solid", accent = false }) {
-  const base =
-    "rounded-2xl px-5 py-3 text-sm font-semibold shadow flex items-center justify-center";
+  const base = "rounded-2xl px-5 py-3 text-sm font-semibold shadow flex items-center justify-center";
   const styles = {
     solid: `${accent ? "bg-[#e52634]" : "bg-[#203c79]"} text-white hover:opacity-90`,
     outline: "border border-[#203c79] text-[#203c79] hover:bg-[#203c79]/5",
@@ -329,8 +274,7 @@ function ValueTiles() {
           Why AAC with Xbloc<sup className="relative top-[-0.3em] text-[0.6em]">2</sup>
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
-          Technical. Code aligned. Straightforward install. We keep it simple
-          and fast for builders, GCs, and design teams.
+          Technical. Code aligned. Straightforward install. We keep it simple and fast for builders, GCs, and design teams.
         </p>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tiles.map((t) => (
@@ -349,99 +293,121 @@ function ValueTiles() {
   );
 }
 
-/* ------------------------- Audience Tab & Gallery ------------------------- */
+/* ------------------------- Audience Tab (animated) ------------------------ */
 
 function AudienceTabs() {
   const tabs = ["Builders", "Installers", "Architects", "Homeowners"];
   const [active, setActive] = useState("Builders");
+  const tabBarRef = useRef(null);
+  const tabRefs = useRef([]);
+  const [underline, setUnderline] = useState({ left: 0, width: 0 });
+
+  useEffect(() => {
+    if (!tabBarRef.current) return;
+    const i = tabs.indexOf(active);
+    const el = tabRefs.current[i];
+    if (el && tabBarRef.current) {
+      const parentLeft = tabBarRef.current.getBoundingClientRect().left;
+      const rect = el.getBoundingClientRect();
+      setUnderline({ left: rect.left - parentLeft, width: rect.width });
+    }
+  }, [active]);
 
   const content = {
     Builders: [
       {
         title: "Proven & compliant systems",
         icon: "/icons/icon_Proven-64x64-1.svg",
-        copy: "UL-listed assemblies, ASTM-backed. Ready for AHJ review.",
+        copy:
+          "Xbloc² AAC systems are UL-listed and ASTM aligned. Our engineering team supports compliant design and AHJ review.",
       },
       {
         title: "Strong & solid",
         icon: "/icons/icon_Strong-and-solid-1.svg",
-        copy: "Single-wythe strength. Impact tough and durable.",
+        copy:
+          "Steel-reinforced AAC panels with anti-corrosion protection deliver durable strength for demanding builds.",
       },
       {
         title: "Quality & speed",
         icon: "/icons/icon_Quality-and-speed-1.svg",
-        copy: "Fewer trades. Faster close-in. Less punch.",
+        copy:
+          "Building with Xbloc² can mean faster construction times without sacrificing quality.",
       },
       {
         title: "Fire resistant",
         icon: "/icons/icon_Fire-resistant-1.svg",
-        copy: "Non-combustible. Up to 4-hour assemblies.",
+        copy:
+          "Xbloc² AAC is non-combustible and renowned for its fire-resistant properties.",
       },
     ],
     Installers: [
       {
         title: "Strong & solid",
         icon: "/icons/icon_Strong-and-solid-1.svg",
-        copy: "Clean cuts. Reliable anchors. Solid bearing.",
+        copy: "Clean cuts. Reliable anchors. Solid bearing for repeatable installs.",
       },
       {
         title: "Quality & speed",
         icon: "/icons/icon_Quality-and-speed-1.svg",
-        copy: "Simple workflow. Light rigs. Smooth staging.",
+        copy: "Simple workflow with light rigs and smooth staging reduces install time.",
       },
       {
         title: "Fire resistant",
         icon: "/icons/icon_Fire-resistant-1.svg",
-        copy: "Single inspection path. Less rework.",
+        copy: "Single inspection path. Less rework and clearer sequencing.",
       },
       {
         title: "Sustainable",
         icon: "/icons/icon_Energy-efficient-1.svg",
-        copy: "Low waste on site. High material efficiency.",
+        copy: "Custom modules reduce waste. Efficient use of raw materials.",
       },
     ],
     Architects: [
       {
         title: "Proven & compliant systems",
         icon: "/icons/icon_Proven-64x64-1.svg",
-        copy: "UL U-series details. CAD and specs ready.",
+        copy:
+          "UL U-series assemblies, CAD details, and specifications ready for submittal.",
       },
       {
         title: "Strong & solid",
         icon: "/icons/icon_Strong-and-solid-1.svg",
-        copy: "Robust envelope. Seismic-friendly mass.",
+        copy:
+          "Robust envelope with beneficial mass for seismic performance and durability.",
       },
       {
         title: "Energy efficient",
         icon: "/icons/icon_Energy-efficient-1.svg",
-        copy: "Thermal mass and R-value advantages.",
+        copy:
+          "Thermal mass plus R-value advantages support energy-efficient designs.",
       },
       {
         title: "Sustainable",
         icon: "/icons/icon_Design-versatility-1.svg",
-        copy: "Long service life. Fewer finishes.",
+        copy:
+          "Long service life and fewer finish layers enable lower lifecycle impact.",
       },
     ],
     Homeowners: [
       {
         title: "Strong & solid",
         icon: "/icons/icon_Strong-and-solid-1.svg",
-        copy: "Solid walls that feel secure.",
+        copy: "Solid walls that feel secure and stand up to daily use.",
       },
       {
         title: "Energy efficient",
         icon: "/icons/icon_Energy-efficient-1.svg",
-        copy: "Comfortable interiors. Lower energy use.",
+        copy: "Comfortable interiors with lower energy use across seasons.",
       },
       {
         title: "Noise reduction",
         icon: "/icons/icon_Noise-reduction-1.svg",
-        copy: "Quiet rooms. Less street noise.",
+        copy: "Less street and room-to-room noise for quieter living.",
       },
       {
         title: "Design versatility",
         icon: "/icons/icon_Design-versatility-1.svg",
-        copy: "Clean lines. Many finish options.",
+        copy: "Clean lines with many finish options to match your vision.",
       },
     ],
   };
@@ -449,27 +415,36 @@ function AudienceTabs() {
   return (
     <section className="py-12 border-t">
       <Container>
-        {/* Tabs row (no title label) */}
-        <div className="flex flex-wrap gap-8 text-sm font-semibold text-neutral-600">
-          {tabs.map((t) => (
+        {/* Tabs row with moving underline, no heading label */}
+        <div ref={tabBarRef} className="relative flex flex-wrap gap-8 text-sm font-semibold text-neutral-600">
+          {tabs.map((t, i) => (
             <button
               key={t}
+              ref={(el) => (tabRefs.current[i] = el)}
               onClick={() => setActive(t)}
               className={`pb-2 transition-colors ${
-                active === t
-                  ? "text-[#203c79] border-b-2 border-[#203c79]"
-                  : "hover:text-neutral-900 border-b-2 border-transparent"
+                active === t ? "text-[#203c79]" : "hover:text-neutral-900"
               }`}
             >
               {t}
             </button>
           ))}
+          <span
+            className="absolute bottom-0 h-0.5 bg-[#203c79] transition-all duration-300"
+            style={{ left: underline.left, width: underline.width }}
+            aria-hidden="true"
+          />
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-neutral-200" aria-hidden="true" />
         </div>
 
-        {/* Cards */}
+        {/* Cards with swipeUp stagger on tab switch */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {content[active].map((c) => (
-            <div key={c.title} className="rounded-3xl border p-6 shadow-sm">
+          {content[active].map((c, i) => (
+            <div
+              key={`${active}-${c.title}-${i}`}
+              className="rounded-3xl border p-6 shadow-sm opacity-0 animate-[swipeUp_0.5s_ease_forwards]"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
               <img src={c.icon} alt="" className="h-12 w-12 mb-4" />
               <h3 className="text-lg font-semibold">{c.title}</h3>
               <p className="mt-2 text-sm text-neutral-700">{c.copy}</p>
@@ -481,85 +456,92 @@ function AudienceTabs() {
   );
 }
 
-function ApplicationsGallery() {
-  const tabs = ["Residential", "Apartment", "Commercial"];
-  const [active, setActive] = useState("Residential");
+/* ----------------------- Applications Accordion (animated) ---------------- */
 
-  const slides = {
-    Residential: {
+function ApplicationsAccordion() {
+  const panels = [
+    {
+      key: "Residential",
       img: "/gallery/residential.jpg",
       title: "Residential",
       copy: "Durable, fire-safe, and energy-efficient homes with Xbloc² wall systems.",
       cta: { href: "#rfq", label: "Specify Xbloc² for Your Project" },
       overlay: "light",
     },
-    Apartment: {
+    {
+      key: "Apartment",
       img: "/gallery/apartment.jpg",
       title: "Apartment",
-      copy:
-        "Faster installation and proven acoustic performance for multi-family and mid-rise.",
+      copy: "Faster installation and proven acoustic performance for multi-family and mid-rise.",
       cta: { href: "#design", label: "Get Design Support" },
       overlay: "light",
     },
-    Commercial: {
+    {
+      key: "Commercial",
       img: "/gallery/commercial.jpg",
       title: "Commercial",
-      copy:
-        "Engineered strength and speed for offices, schools, hospitality, and industrial.",
+      copy: "Engineered strength and speed for offices, schools, hospitality, and industrial.",
       cta: { href: "#rfq", label: "Request a Technical Consultation" },
       overlay: "dark",
     },
-  };
+  ];
+
+  const [open, setOpen] = useState("Residential");
 
   return (
     <section className="py-16">
       <Container>
         <div className="grid gap-6 md:grid-cols-5">
-          {/* Vertical tabs */}
+          {/* Vertical accordion headers */}
           <div className="flex md:flex-col gap-3 md:col-span-1">
-            {tabs.map((t) => (
+            {panels.map((p) => (
               <button
-                key={t}
-                onClick={() => setActive(t)}
-                className={`flex items-center justify-center md:justify-start md:[writing-mode:vertical-rl] md:rotate-180
-                  rounded-xl px-4 py-3 text-sm font-semibold
-                  ${active === t ? "bg-[#203c79] text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}
+                key={p.key}
+                onClick={() => setOpen(p.key)}
+                className={`flex items-center justify-center md:justify-start md:[writing-mode:vertical-rl] md:rotate-180 rounded-xl px-4 py-3 text-sm font-semibold transition
+                  ${open === p.key ? "bg-[#203c79] text-white" : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200"}
                 `}
                 style={{ minHeight: "56px" }}
-                aria-pressed={active === t}
+                aria-expanded={open === p.key}
               >
-                {t}
+                {p.key}
               </button>
             ))}
           </div>
 
-          {/* Slide */}
-          <div className="relative overflow-hidden rounded-2xl border shadow-sm md:col-span-4 h-[440px]">
-            <img
-              src={slides[active].img}
-              alt={slides[active].title}
-              className="absolute inset-0 h-full w-full object-cover"
-              draggable={false}
-            />
-            <div
-              className={`absolute inset-0 ${
-                slides[active].overlay === "dark"
-                  ? "bg-black/45"
-                  : "bg-black/30"
-              }`}
-            />
-            <div className="absolute inset-0 flex items-end">
-              <div className="p-6 sm:p-8 md:p-10 text-white max-w-xl">
-                <h3 className="text-3xl font-bold">{slides[active].title}</h3>
-                <p className="mt-2 text-white/90">{slides[active].copy}</p>
-                <a
-                  href={slides[active].cta.href}
-                  className="mt-5 inline-block rounded-lg bg-[#e52634] px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
-                >
-                  {slides[active].cta.label}
-                </a>
+          {/* Animated panel */}
+          <div className="relative overflow-hidden rounded-2xl border shadow-sm md:col-span-4">
+            {panels.map((p) => (
+              <div
+                key={p.key}
+                className={`${
+                  open === p.key ? "block" : "hidden"
+                } relative h-[440px]`}
+              >
+                <img
+                  src={p.img}
+                  alt={p.title}
+                  className="absolute inset-0 h-full w-full object-cover opacity-0 animate-[fadeInScale_500ms_ease_forwards]"
+                />
+                <div
+                  className={`absolute inset-0 ${
+                    p.overlay === "dark" ? "bg-black/45" : "bg-black/30"
+                  }`}
+                />
+                <div className="absolute inset-0 flex items-end">
+                  <div className="p-6 sm:p-8 md:p-10 text-white max-w-xl">
+                    <h3 className="text-3xl font-bold">{p.title}</h3>
+                    <p className="mt-2 text-white/90">{p.copy}</p>
+                    <a
+                      href={p.cta.href}
+                      className="mt-5 inline-block rounded-lg bg-[#e52634] px-5 py-3 text-sm font-semibold text-white hover:opacity-90"
+                    >
+                      {p.cta.label}
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </Container>
@@ -581,12 +563,9 @@ function Compare() {
   return (
     <section className="border-y bg-neutral-50/50 py-16" aria-labelledby="compare-heading">
       <Container>
-        <h2 id="compare-heading" className="text-3xl font-bold tracking-tight">
-          AAC fire walls vs gypsum systems
-        </h2>
+        <h2 id="compare-heading" className="text-3xl font-bold tracking-tight">AAC fire walls vs gypsum systems</h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
-          Typical differences shown for planning. Confirm final assemblies and
-          details with your engineer and AHJ.
+          Typical differences shown for planning. Confirm final assemblies and details with your engineer and AHJ.
         </p>
         <div className="mt-8 overflow-hidden rounded-2xl border bg-white shadow-sm">
           <table className="w-full text-left text-sm">
@@ -637,8 +616,7 @@ function DosePacks() {
           Xbloc<sup className="relative top-[-0.3em] text-[0.6em]">2</sup> dose packs
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
-          Ready-to-use admixture packs that boost performance in thinset,
-          stucco, repair, and finishes. No special gear.
+          Ready-to-use admixture packs that boost performance in thinset, stucco, repair, and finishes. No special gear.
         </p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((card) => (
@@ -662,12 +640,12 @@ function DosePacks() {
 /* -------------------------------- Calculator ------------------------------ */
 
 function Calculator() {
-  const [wallArea, setWallArea] = useState(10000); // sf
-  const [panelLen, setPanelLen] = useState(8); // ft
-  const [panelHeight, setPanelHeight] = useState(2); // ft
-  const [wastePct, setWastePct] = useState(5); // %
-  const [matCostSf, setMatCostSf] = useState(3.12); // $/sf
-  const [laborSf, setLaborSf] = useState(4.5); // $/sf
+  const [wallArea, setWallArea] = useState(10000);
+  const [panelLen, setPanelLen] = useState(8);
+  const [panelHeight, setPanelHeight] = useState(2);
+  const [wastePct, setWastePct] = useState(5);
+  const [matCostSf, setMatCostSf] = useState(3.12);
+  const [laborSf, setLaborSf] = useState(4.5);
 
   const panelArea = useMemo(() => panelLen * panelHeight, [panelLen, panelHeight]);
   const count = useMemo(
@@ -682,9 +660,7 @@ function Calculator() {
     <section id="calc" className="border-y bg-neutral-50/50 py-16" aria-labelledby="calc-heading">
       <Container>
         <div className="flex items-center justify-between gap-6">
-          <h2 id="calc-heading" className="text-3xl font-bold tracking-tight">
-            AAC wall calculator
-          </h2>
+          <h2 id="calc-heading" className="text-3xl font-bold tracking-tight">AAC wall calculator</h2>
           <div className="hidden md:flex items-center gap-2 rounded-full border bg-white px-3 py-1 text-xs font-semibold text-neutral-700">
             <CalcIcon className="h-4 w-4" /> Budgeting tool only
           </div>
@@ -732,12 +708,8 @@ function Calculator() {
 function KPI({ label, value, highlight = false }) {
   return (
     <div className={`rounded-2xl border p-4 shadow-sm ${highlight ? "bg-[#203c79] text-white" : "bg-white"}`}>
-      <div className={`text-xs uppercase tracking-wide ${highlight ? "text-neutral-200" : "text-neutral-500"}`}>
-        {label}
-      </div>
-      <div className={`mt-1 text-2xl font-bold tabular-nums ${highlight ? "text-white" : "text-neutral-900"}`}>
-        {value}
-      </div>
+      <div className={`text-xs uppercase tracking-wide ${highlight ? "text-neutral-200" : "text-neutral-500"}`}>{label}</div>
+      <div className={`mt-1 text-2xl font-bold tabular-nums ${highlight ? "text-white" : "text-neutral-900"}`}>{value}</div>
     </div>
   );
 }

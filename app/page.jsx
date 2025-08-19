@@ -808,10 +808,10 @@ ${form.message}`
           Send plans or a quick scope. We reply with assemblies, quantities, and a schedule plan.
         </p>
 
-        {/* Stretch both cards to equal height on desktop */}
-        <div className="mt-8 grid gap-6 lg:grid-cols-2 items-stretch">
+        {/* Desktop: let cards size to content to avoid extra empty space */}
+        <div className="mt-8 grid gap-6 lg:grid-cols-2">
           {/* Left: frosted dark form card */}
-          <form className="h-full flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/60 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+          <form className="flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/60 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
             <h3 className="text-lg font-semibold text-white">Project details</h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <TextField label="Name" value={form.name} onChange={(v) => onChange("name", v)} />
@@ -838,7 +838,7 @@ ${form.message}`
                 placeholder="Upload links to plans, required ratings, and dates"
               />
             </label>
-            <div className="mt-auto pt-6 flex flex-wrap items-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-3">
               <a
                 href={mailtoHref}
                 className="rounded-2xl bg-[#e52634] px-5 py-3 text-sm font-semibold text-white shadow hover:opacity-90"
@@ -854,8 +854,8 @@ ${form.message}`
             </div>
           </form>
 
-          {/* Right: frosted dark info card */}
-          <div className="h-full flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+          {/* Right: frosted dark info card (no forced height) */}
+          <div className="flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
             <h3 className="text-lg font-semibold text-white">What to include</h3>
             <ul className="mt-3 list-disc space-y-2 pl-6 text-sm text-white/85">
               <li>Plan pages and wall schedules</li>
@@ -887,7 +887,6 @@ ${form.message}`
                 </a>
               </div>
             </div>
-            <div className="mt-auto" />
           </div>
         </div>
       </Container>
@@ -988,22 +987,16 @@ function Footer() {
         </div>
       </Container>
 
-      {/* Disclosure, left-aligned within site columns */}
+      {/* Copyright + disclosure together, aligned to site column */}
       <div className="border-t border-[gainsboro] py-6">
         <Container>
           <p className="text-xs text-neutral-600 max-w-5xl">
-            Information on this website is provided as general guidance only and does not constitute a recommendation to use any of our products.
-            You should always seek professional advice to confirm that Xbloc2 products and their intended applications meet your specific requirements.
-            While product images and colors are shown as accurately as possible, we recommend reviewing physical samples prior to purchase since digital
-            representations may affect appearance. Additionally, variations in color and surface finish may occur between batches due to standard
-            manufacturing processes and raw materials. For further information, please contact Xbloc2 at{" "}
+            © {new Date().getFullYear()} Xbloc². All rights reserved.<br />
+            Xbloc² and related marks are trademarks of their respective owners.<br /><br />
+            Information on this website is provided as general guidance only and does not constitute a recommendation to use any of our products. You should always seek professional advice to confirm that Xbloc2 products and their intended applications meet your specific requirements. While product images and colors are shown as accurately as possible, we recommend reviewing physical samples prior to purchase since digital representations may affect appearance. Additionally, variations in color and surface finish may occur between batches due to standard manufacturing processes and raw materials. For further information, please contact Xbloc2 at{" "}
             <a href="tel:8881234567" className="underline underline-offset-2">888-123-4567</a>.
           </p>
         </Container>
-      </div>
-
-      <div className="border-t border-[gainsboro] py-6 text-center text-xs text-neutral-500">
-        © {new Date().getFullYear()} Xbloc². All rights reserved.
       </div>
     </footer>
   );

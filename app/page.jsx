@@ -35,7 +35,7 @@ export default function Xbloc2LandingPage() {
       <Compare />
       <DosePacks />
       <Calculator />
-      <RFQ />
+      <RFQ />                 {/* Dark hero-style section */}
       <Footer />
 
       {/* Keyframes and motion fallbacks */}
@@ -324,7 +324,6 @@ function AudienceTabs() {
     const rect = el.getBoundingClientRect();
     setUnderline({ left: rect.left - parentLeft, width: rect.width });
 
-    // Recalc after layout settles
     const id = requestAnimationFrame(() => {
       const rect2 = el.getBoundingClientRect();
       setUnderline({ left: rect2.left - parentLeft, width: rect2.width });
@@ -440,7 +439,6 @@ function AudienceTabs() {
   return (
     <section className="py-12 border-t">
       <Container>
-        {/* Tabs row with moving underline */}
         <div ref={tabBarRef} className="relative flex flex-wrap gap-8 text-sm font-semibold text-neutral-600">
           {tabs.map((t, i) => (
             <button
@@ -462,7 +460,6 @@ function AudienceTabs() {
           <div className="absolute bottom-0 left-0 right-0 h-px bg-neutral-200" aria-hidden="true" />
         </div>
 
-        {/* Cards with animation but visible by default on mobile */}
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {content[active].map((c, i) => (
             <div
@@ -524,7 +521,6 @@ function ApplicationsGallery() {
                 draggable={false}
               />
 
-              {/* Overlays should not block taps */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
 
               <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
@@ -782,15 +778,24 @@ ${form.message}`
   }, [form]);
 
   return (
-    <section id="rfq" className="py-16" aria-labelledby="rfq-heading">
-      <Container>
-        <h2 id="rfq-heading" className="text-3xl font-bold tracking-tight">Request a quote</h2>
-        <p className="mt-2 max-w-3xl text-neutral-700">
+    <section id="rfq" className="relative py-16" aria-labelledby="rfq-heading">
+      {/* hero-style gradient field */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(18,74,214,0.70)" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/25" />
+      </div>
+
+      <Container className="relative z-10">
+        <h2 id="rfq-heading" className="text-3xl font-bold tracking-tight text-white">Request a quote</h2>
+        <p className="mt-2 max-w-3xl text-white/85">
           Send plans or a quick scope. We reply with assemblies, quantities, and a schedule plan.
         </p>
+
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <form className="rounded-3xl border bg-white p-6 shadow-sm">
-            <div className="grid gap-4 sm:grid-cols-2">
+          {/* Left: frosted dark form card */}
+          <form className="rounded-3xl ring-1 ring-white/15 bg-neutral-900/60 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+            <h3 className="text-lg font-semibold text-white">Project details</h3>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <TextField label="Name" value={form.name} onChange={(v) => onChange("name", v)} />
               <TextField label="Company" value={form.company} onChange={(v) => onChange("company", v)} />
               <TextField label="Email" type="email" value={form.email} onChange={(v) => onChange("email", v)} />
@@ -806,12 +811,12 @@ ${form.message}`
               <TextField label="Wall area (sf)" value={form.area} onChange={(v) => onChange("area", v)} />
             </div>
             <label className="mt-4 block">
-              <span className="text-sm font-medium text-neutral-700">Notes</span>
+              <span className="text-sm font-medium text-white">Notes</span>
               <textarea
                 rows={5}
                 value={form.message}
                 onChange={(e) => onChange("message", e.target.value)}
-                className="mt-1 w-full rounded-xl border px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
+                className="mt-1 w-full rounded-xl border border-white/20 bg-white/95 px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
                 placeholder="Upload links to plans, required ratings, and dates"
               />
             </label>
@@ -824,40 +829,41 @@ ${form.message}`
               </a>
               <a
                 href="#rfq"
-                className="rounded-2xl border border-[#203c79] px-5 py-3 text-sm font-semibold text-[#203c79] hover:bg-[#203c79]/5"
+                className="rounded-2xl border border-white/40 px-5 py-3 text-sm font-semibold text-white/90 hover:bg-white/10"
               >
                 Start Your Project Assessment
               </a>
             </div>
           </form>
 
-          <div className="rounded-3xl border bg-neutral-50 p-6 shadow-sm">
-            <h3 className="text-lg font-semibold">What to include</h3>
-            <ul className="mt-3 list-disc space-y-2 pl-6 text-sm text-neutral-700">
+          {/* Right: frosted dark info card */}
+          <div className="rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+            <h3 className="text-lg font-semibold text-white">What to include</h3>
+            <ul className="mt-3 list-disc space-y-2 pl-6 text-sm text-white/85">
               <li>Plan pages and wall schedules</li>
               <li>Required fire ratings and STC goals</li>
               <li>Approximate wall areas</li>
               <li>Site location and dates</li>
               <li>Any preferred assemblies or details</li>
             </ul>
-            <div className="mt-6 rounded-2xl border bg-white p-4 text-sm">
-              <div className="flex items-center gap-2 text-neutral-500">
+            <div className="mt-6 rounded-2xl ring-1 ring-white/15 bg-white/10 backdrop-blur p-4 text-sm text-white/90">
+              <div className="flex items-center gap-2 text-white/85">
                 <FileText className="h-4 w-4" />
                 <span className="font-semibold">Spec library</span>
               </div>
-              <p className="mt-2 text-neutral-700">
+              <p className="mt-2">
                 Download the Technical Brochure, UL letters, CAD details, and install guides in Resources.
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <a
                   href="#resources"
-                  className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100"
+                  className="inline-flex items-center gap-2 rounded-xl ring-1 ring-white/25 px-3 py-2 text-xs font-semibold text-white/90 hover:bg-white/10"
                 >
                   <BookOpen className="h-4 w-4" /> Explore Case Studies
                 </a>
                 <a
                   href="#resources"
-                  className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold hover:bg-neutral-100"
+                  className="inline-flex items-center gap-2 rounded-xl ring-1 ring-white/25 px-3 py-2 text-xs font-semibold text-white/90 hover:bg-white/10"
                 >
                   <Play className="h-4 w-4" /> Watch Placement in Action
                 </a>
@@ -873,12 +879,12 @@ ${form.message}`
 function TextField({ label, value, onChange, type = "text" }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-neutral-700">{label}</span>
+      <span className="text-sm font-medium text-white">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded-xl border px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
+        className="mt-1 w-full rounded-xl border border-white/20 bg-white/95 px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
       />
     </label>
   );
@@ -887,11 +893,11 @@ function TextField({ label, value, onChange, type = "text" }) {
 function SelectField({ label, value, onChange, options }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-neutral-700">{label}</span>
+      <span className="text-sm font-medium text-white">{label}</span>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded-xl border bg-white px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
+        className="mt-1 w-full rounded-xl border border-white/20 bg-white/95 px-3 py-2 text-sm shadow-sm outline-none ring-0 focus:border-[#203c79]"
       >
         {options.map((o) => (
           <option key={o} value={o}>

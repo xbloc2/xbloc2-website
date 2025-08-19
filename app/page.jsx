@@ -414,7 +414,7 @@ function DosePacks() {
     <section className="py-16" aria-labelledby="dose-heading">
       <Container>
         <h2 id="dose-heading" className="text-3xl font-bold tracking-tight">
-          Xbloc<sup className="relative top-[-0.1em] text-[0.3em]">2</sup> dose packs
+          Xbloc<sup className="relative top-[-0.3em] text-[0.6em]">2</sup> dose packs
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
           Ready-to-use admixture packs that boost performance in thinset,

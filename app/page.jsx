@@ -324,7 +324,7 @@ function ValueTiles() {
     <section id="why" className="py-16 md:py-24">
       <Container>
         <h2 className="text-3xl font-bold tracking-tight">
-          Why AAC with Xbloc<sup className="align-super text-[0.4em]">2</sup>
+          Why AAC with Xbloc<sup className="align-super text-[0.6em]">2</sup>
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
           Technical. Code aligned. Straightforward install. We keep it simple
@@ -414,7 +414,7 @@ function DosePacks() {
     <section className="py-16" aria-labelledby="dose-heading">
       <Container>
         <h2 id="dose-heading" className="text-3xl font-bold tracking-tight">
-          Xbloc<sup className="align-super text-[0.4em]">2</sup> dose packs
+          Xbloc<sup className="align-super text-[0.6em]">2</sup> dose packs
         </h2>
         <p className="mt-2 max-w-3xl text-neutral-700">
           Ready-to-use admixture packs that boost performance in thinset,

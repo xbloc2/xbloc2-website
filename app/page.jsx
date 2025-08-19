@@ -121,7 +121,7 @@ function Hero() {
           loop
           playsInline
           preload="metadata"
-          poster="/xbloc2-logo.svg"
+          poster="/gallery/building-sketch-1536x1024.png"
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source src="/Building-project_2.mp4" type="video/mp4" />
@@ -779,8 +779,14 @@ ${form.message}`
 
   return (
     <section id="rfq" className="relative py-16" aria-labelledby="rfq-heading">
-      {/* hero-style gradient field */}
+      {/* background image + overlay */}
       <div className="pointer-events-none absolute inset-0">
+        <img
+          src="/gallery/building-sketch-1536x1024.png"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          draggable={false}
+        />
         <div className="absolute inset-0" style={{ backgroundColor: "rgba(18,74,214,0.70)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/25" />
       </div>
@@ -974,7 +980,6 @@ function Footer() {
     </footer>
   );
 }
-
 
 /* --------------------------------- Utils ---------------------------------- */
 

@@ -855,7 +855,7 @@ ${form.message}`
           </form>
 
           {/* Right: frosted dark info card (no forced height) */}
-          <div className="flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+          <div className="flex flex-col rounded-3xl ring-1 ring-white/15 bg-neutral-900/50 backdrop-blur-md p-6 shadow-[0_10px_30px_rgba(0,0,0,0.35)] h-auto lg:h-[400px] lg:max-h-[400px] justify-between">
             <h3 className="text-lg font-semibold text-white">What to include</h3>
             <ul className="mt-3 list-disc space-y-2 pl-6 text-sm text-white/85">
               <li>Plan pages and wall schedules</li>
